@@ -1,54 +1,6 @@
 # data
 
-famsup - family educational support (binary: yes or no)
 
-paid - extra paid classes within the course subject (Math or Portuguese) (binary: yes or no)
-
-activities - extra-curricular activities (binary: yes or no)
-
-nursery - attended nursery school (binary: yes or no)
-
-higher - wants to take higher education (binary: yes or no)
-
-internet - Internet access at home (binary: yes or no)
-
-romantic - with a romantic relationship (binary: yes or no)
-
-famrel - quality of family relationships (numeric: from 1 - very bad to 5 - excellent)
-
-freetime - free time after school (numeric: from 1 - very low to 5 - very high)
-
-goout - going out with friends (numeric: from 1 - very low to 5 - very high)
-
-Dalc - workday alcohol consumption (numeric: from 1 - very low to 5 - very high)
-
-Walc - weekend alcohol consumption (numeric: from 1 - very low to 5 - very high)
-
-health - current health status (numeric: from 1 - very bad to 5 - very good)
-
-absences - number of school absences (numeric: from 0 to 93)
-
-These grades are related with the course subject, Math or Portuguese:
-
-G1 - first period grade (numeric: from 0 to 20)
-
-G2 - second period grade (numeric: from 0 to 20)
-
-G3 - final grade (numeric: from 0 to 20, output target)
-
-Additional note: there are several (382) students that belong to both datasets.
-These students can be identified by searching for identical attributes
-that characterize each student, as shown in the annexed R file.
-
-Source Information
-P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
-
-Fabio Pagnotta, Hossain Mohammad Amran.
-Email:fabio.pagnotta@studenti.unicam.it, mohammadamra.hossain '@' studenti.unicam.it
-University Of Camerino
-
-https://archive.ics.uci.edu/ml/datasets/STUDENT+ALCOHOL+CONSUMPTION
-## Student Alcohol Consumption 
 
 |variable         |description |
 |:----------------|:-----------|
@@ -69,36 +21,19 @@ https://archive.ics.uci.edu/ml/datasets/STUDENT+ALCOHOL+CONSUMPTION
 |failures        | number of past class failures (numeric: n if 1<=n<3, else 4)|
 |schoolsup        | extra educational support (binary: yes or no) |
 |famsup       | family educational support (binary: yes or no) |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
-|variable3        | Description of variable 3 |
+|paid        | extra paid classes within the course subject (Math or Portuguese) (binary: yes or no) |
+|activities        | extra-curricular activities (binary: yes or no)|
+|nursery      | attended nursery school (binary: yes or no) |
+|higher       | wants to take higher education (binary: yes or no) |
+|internet        | Internet access at home (binary: yes or no) |
+|romantic        |  with a romantic relationship (binary: yes or no) |
+|famrel        | quality of family relationships (numeric: from 1 - very bad to 5 - excellent) |
+|freetime        | free time after school (numeric: from 1 - very low to 5 - very high) |
+|goout        | going out with friends (numeric: from 1 - very low to 5 - very high)|
+|Dalc        | workday alcohol consumption (numeric: from 1 - very low to 5 - very high)|
+|Walc        | weekend alcohol consumption (numeric: from 1 - very low to 5 - very high) |
+|health        | current health status (numeric: from 1 - very bad to 5 - very good) |
+|absences       | number of school absences (numeric: from 0 to 93)|
+|G1        | first period grade (numeric: from 0 to 20) |
+|G2       | second period grade (numeric: from 0 to 20) |
+|G3        | final grade (numeric: from 0 to 20, output target)|
