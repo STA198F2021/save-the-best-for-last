@@ -22,8 +22,9 @@ student <- readr::read_csv("student-mat.csv")
 
 # Introduction and Data, including Research Questions
 
-(The introduction should introduce your general research question and your data (where it came from, how it was collected, what are the cases, what are the variables, etc.). Your research questions should be clearly specified. The motivation for your research question should be clear, with citations to relevant literature as appropriate.)
+For our research project, we plan to study two questions with respect to alcohol consumption amongst students in math courses in secondary school. Although this is not a traditional “global health” dataset, there is merit to analyzing this data from a health perspective because of how alcoholism or alcohol consumption in general impacts personal health and cognition. Thus, the first question is what family circumstances are correlated(associated) with student alcohol consumption, which may allow us to gain better insight into how family education, presence, or occupation may be associated with alcohol use. The second question we seek to answer is how student alcohol consumption correlates with student life whether it be through absences, class failures, marks received on exams, activities outside of school, or desire to attend university. 
 
+To accomplish this task, we will be utilizing a dataset we found on Kaggle, which was collected in the 2005-2006 school year. Although the dataset was made available by University of California Irvine (UCI) Machine Learning, the source itself was revealed in a paper called “Using Data Mining to Predict Secondary School Student Performance.” In the paper, the authors state that the data was collected through paper questionnaires with predefined answers for most questions. This questionnaire was developed in conjunction with and reviewed by school staff and students (Cortez et al 2). The questionnaire was answered by all students attending a math course in two public schools, Gabriel Pereira or Mousinho da Silveira, which added up to 395 students (Cortez et al 2).  The questionnaire collected information through 37 questions, of which 33 exist as variables in the dataset (Cortez et al 2). However, as of now, we plan to most closely assess the following variables for our first question regarding potential family factors correlated with alcohol consumption: family size, parental cohabitation status, mother’s education level, father’s education level, mother’s job, father’s job, guardian, family relationship quality, and family educational support. For our second question regarding alcohol consumption in student life, we want to utilize the following variables: desire to pursue higher education, first, second, and final grades, number of failed courses, and student health level. Across both questions, we will investigate their correlation amongst the variables of reported daily and weekly alcohol consumption. 
 # Glimpse
 
 ```{r}
@@ -35,3 +36,8 @@ glimpse(student)
 
 (Specify the outcome (response, Y) and predictor (explanatory, X) variables you will use to answer your question, as well as the comparison groups you will use, if applicable. You may include very preliminary exploratory data analysis, including some summary statistics and visualizations, along with some explanation on how they help you learn more about your data. Note the statistical method(s) that you believe will be useful in answering your question(s). 
 What results from these specific statistical methods are needed to support your hypothesized answer?)
+
+Citations:
+
+P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
+
