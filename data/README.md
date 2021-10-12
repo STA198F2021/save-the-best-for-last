@@ -1,5 +1,28 @@
 # data
 
+The data were obtained in a survey of students math and portuguese language courses in secondary school. It contains a lot of interesting social, gender and study information about students. You can use it for some EDA or try to predict students final grade.
+
+**The data below are attributes for both student-mat.csv (Math course) and student-por.csv (Portuguese language course) datasets. **
+
+These grades are related with the course subject, Math or Portuguese:
+G1 - first period grade (numeric: from 0 to 20)
+G2 - second period grade (numeric: from 0 to 20)
+G3 - final grade (numeric: from 0 to 20, output target)
+
+Additional note: there are several (382) students that belong to both datasets .
+These students can be identified by searching for identical attributes
+that characterize each student, as shown in the annexed R file.
+
+Source Information
+P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
+
+Fabio Pagnotta, Hossain Mohammad Amran.
+Email:fabio.pagnotta@studenti.unicam.it, mohammadamra.hossain '@' studenti.unicam.it
+University Of Camerino
+
+https://archive.ics.uci.edu/ml/datasets/STUDENT+ALCOHOL+CONSUMPTION
+
+
 
 
 |variable         |description |
