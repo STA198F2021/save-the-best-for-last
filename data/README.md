@@ -24,7 +24,7 @@ https://archive.ics.uci.edu/ml/datasets/STUDENT+ALCOHOL+CONSUMPTION
 
 
 
-
+# Variables
 |variable         |description |
 |:----------------|:-----------|
 |school        | student's school (binary: 'GP' - Gabriel Pereira or 'MS' - Mousinho da Silveira) |
