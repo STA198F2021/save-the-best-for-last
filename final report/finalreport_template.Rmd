@@ -1,7 +1,56 @@
 ---
 title: "Final Report"
 subtitle: "due November 16, 2021 by 11:59 PM "
-author: "Your names and team name here"
-date: ""
+author: "Danielle Mensah, Haby Sow, Colin Lee"
+date: "11/12/2021"
 output: pdf_document
 ---
+
+```{r read_data}
+library(tidyverse)
+library(tidymodels)
+setwd("/home/guest/R/project01")
+student <- readr::read_csv("data/student-mat.csv")
+
+student_binger <- student %>%
+   mutate(binger = ifelse(sex == "F", ifelse(Dalc >= 3,1,0), ifelse(Dalc >= 4, 1, 0)))
+
+student_binger$binger=factor(student_binger$binger,levels=c(1,0),labels=c("Yes","No"))
+student_binger$binger=relevel(student_binger$binger, ref = "No")
+
+```
+
+```{r logistic analysis}
+student_logit <- student_binger %>%
+  mutate(urban = ifelse(address == "U", 1, 0)) %>%
+  mutate(famlarge = ifelse(famsize == "GT3", 1, 0)) %>%
+  mutate(parents_together = ifelse(Pstatus == "T", 1, 0)) %>%
+  mutate(mother_secondary = ifelse(Medu >= 3, 1, 0)) %>%
+  mutate(father_secondary = ifelse(Fedu >= 3, 1, 0)) %>%
+  mutate(school_support = ifelse(schoolsup == "yes", 1, 0)) %>%
+  mutate(family_support = ifelse(famsup == "yes", 1, 0)) %>%
+  mutate(extra_tutoring = ifelse(paid == "yes", 1, 0)) %>%
+  mutate(alcoholic = ifelse(binger == "Yes", 1, 0))
+
+student_logit_fit <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(binger ~ urban + famlarge + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring, data = student_logit, family = "binomial")
+
+tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
+```
+
+#Clearing Missing Data
+```{r cleaning data}
+missingval <- is.na(student)
+head(missingval)
+```
+As you can see from this quick check. There are no missing values in our data. Therefore we can move on with further analysis and no clearing of variables needs to be done. I put only the head of the data because it was too long to visually see the whole thing however it is all false.
+
+#Data Wrangling
+There are two big questions that we want answered with this data set: whether a students average alcohol consumption is correlated with their family circumstances and whether alcohol consumption has an effect on student life. Lets first look at some geographgics of our students
+```{r geographics}
+
+```
+
+
+
