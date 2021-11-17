@@ -199,16 +199,15 @@ print(tidy(model_dalc_failures))
 ```
 However, the linear regression for the number of failures as the response variable does produce a significant estimate for Dalc, with a p-value of 0.007, far below our preferred p-value of 0.05. Thus, we can reject the null hypothesis and state that there is evidence to support a relationship between workday alcohol consumption and the number of course failures with the following model:
 
-
 failures = 0.11(Dalc) + 0.17
 
-With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures by 0.11. Thus, daily alcohol consumption negatively impacts one's academic performance by contributing to the number of failed classes.
+With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures by 0.11. Although we can state that daily alcohol consumption negatively impacts one's academic performance by contributing to the number of failed classes, the impact is relatively small, as someone who increases from moderate to very high drinking would only increase their number of past class failures by 0.22.
 
 # Conclusion
 
 The logistic regression was able to answer our first research question regarding the importance of certain family and external factors in impacting whether a student was a workday alcohol binge drinker. From the logistic regression model, we discovered that amongst many family and external factors, including student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery school, only attendance of nursery school and additional paid math classes appeared to be significant. Moreover, if a student attended nursery school, he or she was 0.252 times as likely to be a binge drinker while if someone had additional paid math classes, he or she was 4.285 times as likely to be a binge drinker. 
 
-Through the regression analysis, we have found some important factors that contribute to weekday alcohol consumption. We found that an increase in freetime and going out with friends lead to an increase in weekday alcohol consumption. Moreover, we have seen that having a good quality of family relationships and spending more time studying decreases weekday alcohol consumption. Furthermore, another take away from this analysis is that as students drink more, their number of past class failures increases. 
+Through the regression analysis, we have found some significant factors that contribute to workday alcohol consumption. We found that an increase in freetime, going out with friends, and number of school absences can lead to an increase in weekday alcohol consumption. Moreover, we have seen that having good quality of family relationships and spending more time studying decreases weekday alcohol consumption. Furthermore, we found that workday alcohol consumption does not have a significant relationship with academic performance in terms of grades, but it does play a significant (in terms of p-value) role in the number of past class failures, although its actual impact is relatively small on that front.
 
 All of these results, however, need to be interpreted with caution as this data represents only a small subset of all secondary school students, as it was taken only taken in two secondary schools in a region of Portugal, and only addressed to math students in those two schools. For future analysis to better understand the relationships among family and external factors, alcohol consumption, and academic and personal life, further data needs to be collected from a wider populace with more random sampling. 
 
