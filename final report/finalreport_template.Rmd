@@ -54,17 +54,15 @@ Thus, in order to set up this logistic regression, we had to begin by transformi
 
 Thus, in order to create this binary variable, we created an additional variable called "binger" with the mutate() function, where 1 represents someone who self-reported a workday drinking level of 4 or 5 (high and very high drinking level) and 0 represented moderate, low, or very low drinking levels. Furthermore, we factored the data to "Yes" and "No" for binge drinker and not binge drinker, respectively, and then we releveled the data to make non-binge drinkers the referent group. We made non-binge drinkers the referent group because that should be the norm, and we want to observe how binge drinkers compare with non-binge drinkers.
 
-Next, we had to select the predictor variables for our regression. Because we wanted to answer what sort of external or familial factors impact whether a student is a binge drinker, we used the following variables: residence, family size, parental separation, mother and father education level, educational support, family educational support, extra paid tutoring classes, and whether or not the student attended nursery school.
+Next, we had to select the predictor variables for our regression. Because we wanted to answer what sort of external or familial factors impact whether a student is a binge drinker, and to accomplish this, we chose variables that were more representative of the circumstances surrounding them than something they could control themselves. Thus, we used the following variables: residence, family size, parental separation, mother and father education level, educational support, family educational support, extra paid tutoring classes, whether or not the student attended nursery school.
 
 Thus, we developed the following logistic regression model:
 
-logit(pii) = log(pii/(1-pii)) = B0 + B1(urbani) + B2(famsmalli) + B3(parents_togetheri) + B4(mother_secondaryi) + B5(father_secondaryi) + B6(school_supporti) + B7(family_supporti) + B8(extra_tutoringi) + B9(attended nurseryi)
+logit(pii) = log(pii/(1-pii)) = B0 + B1(urbani) + B2(famsmalli) + B3(parents_togetheri) + B4(mother_secondaryi) + B5(father_secondaryi) + B6(school_supporti) + B7(family_supporti) + B8(extra_tutoringi) + B9(attended_nurseryi) + B10(internet_accessi) + B11(traveltimei)
 
 such that
 
-urbani = 1 if the respondent lives in an urban environment, famsmalli = 1 if the family size is less than 3, parents_togetheri = 1 if the parents are together, mother_secondaryi = 1 if the mother's education level is secondary or above, father_secondaryi = 1 if the father's education level is secondary or above, school_supporti = 1 if the student is receiving school support, family_supporti = 1 if the student is receiving extra family support for education, extra_tutoringi = 1 if the student is receiving extra paid classes within math, and attended_nurseryi = 1 if the student attended nursery school before.
-
-For these variables, we curated them so that for the values equal to 1, we hypothesized those values would be most involved in influencing a student to not be a binge drinker because we believe those to be positive familial or external attributes in one's life that may influence one to avoid binge drinking.
+urbani = 1 if the respondent lives in an urban environment, famsmalli = 1 if the family size is less than 3, parents_togetheri = 1 if the parents are together, mother_secondaryi = 1 if the mother's education level is secondary or above, father_secondaryi = 1 if the father's education level is secondary or above, school_supporti = 1 if the student is receiving school support, family_supporti = 1 if the student is receiving extra family support for education, extra_tutoringi = 1 if the student is receiving extra paid classes within math, and attended_nurseryi = 1 if the student attended nursery school before. Traveltime is a numerical variable, where 1 represents < 15 minutes travel time to school, 2 represents between 15 and 30 minutes travel time, 3 represents 30 minutes to 1 hr travel time, and 4 represents > 1 hr travel time.
 
 For the parental education, since this value was not originally binary, we assessed that it would be most relevant to assess whether or not the education level was secondary or not since if the respondent's parents had reached the at least the same level of education as the respondent him/herself, then there would be some likelihood of greater parental support due to them having shared the same experiences. Regardless, as we will explain in the next section, switching the value to be higher than secondary education makes no impact.
 
@@ -84,12 +82,12 @@ student_logit <- student_binger %>%
   mutate(school_support = ifelse(schoolsup == "yes", 1, 0)) %>%
   mutate(family_support = ifelse(famsup == "yes", 1, 0)) %>%
   mutate(extra_tutoring = ifelse(paid == "yes", 1, 0)) %>%
-  mutate(alcoholic = ifelse(binger == "Yes", 1, 0)) %>%
-  mutate(attended_nursery = ifelse(nursery == "yes", 1, 0))
+  mutate(attended_nursery = ifelse(nursery == "yes", 1, 0)) %>%
+  mutate(internetaccess = ifelse(internet == "yes", 1, 0))
 
 student_logit_fit <- logistic_reg() %>%
   set_engine("glm") %>%
-  fit(binger ~ urban + famsmall + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring + attended_nursery, data = student_logit, family = "binomial")
+  fit(binger ~ urban + famsmall + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring + attended_nursery + internetaccess + traveltime, data = student_logit, family = "binomial")
 
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
 ```
@@ -97,13 +95,15 @@ tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
 
 # Logistic Regression Analysis
 
-Upon completing the logistic regression, we found two variables to be significant at a p-value of 0.05, which were whether or not a student had extra tutoring or not (B8, coefficient for extra_tutoringi) and whether a student had attended nursery or not (coefficient for attended_nurseryi). All other estimates had much higher p-values, which were not close to being significant. Furthermore, we attempted to see how changing the level of education we identified as appropriate for our binary variables on parental education, but the p-value did not shift significantly (change from 0.58/0.60 to 0.66/0.80 for mother's education and father's education respectively). Thus, only for extra tutoring and nursery attendance do we reject the null hypothesis that their estimates are zero and we can state that there is relationship between these variables and workday binge drinking.
+Upon completing the logistic regression, we found three variables to be significant at a p-value of 0.05, which were whether or not a student had extra tutoring or not (B8, coefficient for extra_tutoringi), whether a student had attended nursery or not (B9, coefficient for attended_nurseryi), and the travel time to school for the respondent (B11, coefficient for traveltimei). All other estimates had much higher p-values, which were not close to being significant. Furthermore, we attempted to see how changing the level of education we identified as appropriate for our binary variables on parental education, but the p-value did not shift significantly (change from 0.58/0.60 to 0.66/0.80 for mother's education and father's education respectively). Thus, only for extra tutoring and nursery attendance do we reject the null hypothesis that their estimates are zero and we can state that there is relationship between these variables and workday binge drinking.
 
-Moving forward with the extra_tutoringi variable, the estimate came out to be 4.285 with a p-value of 0.0122 and 95% CI between 1.45 and 14.73. Because the values are exponentiated, this indicates that the odds ratio for this value 4.285, which means that a student with extra paid math classes is 4.285 times as likely to be a binge drinker than someone who does not have extra paid math classes. This is quite interesting and contradicts our original thoughts regarding this variable that higher educational support through tutoring might indicate less likelihood for binge drinking. Some speculation as to why tutoring may be correlated with binge drinking is possibly due to a perceived need for tutoring for the respondent from the students' parents because of the drinking itself. 
+Moving forward with the extra_tutoringi variable, the estimate came out to be 4.285 with a p-value of 0.0122 and 95% CI between 1.45 and 14.73. Because the values are exponentiated, this indicates that the odds ratio for this value 4.285, which means that a student with extra paid math classes is 4.285 times as likely to be a binge drinker than someone who does not have extra paid math classes. This is quite interesting and contradicts our perception regarding this variable that educational support through tutoring might indicate less likelihood for binge drinking. Some speculation as to why tutoring may be correlated with binge drinking is possibly due to a perceived need for tutoring for the respondent from the students' parents because of the drinking itself. 
 
-With regard to the attended_nurseryi variable, the estimate was 0.252 with a p-value of 0.0139 and 95% CI between 0.08 and 077. As this value is exponentiated, the odds ratio is 0.252 and thus a student who has attended nursery may be 0.252 times as likely to be a binge drinker. This is more in line with our hypothesis that nursery attendance may be indicative of a positive external factor, as it is possible that a family's prioritization of education and possible aversion to binge drinking for children.
+With regard to the attended_nurseryi variable, the estimate was 0.252 with a p-value of 0.0139 and 95% CI between 0.08 and 077. As this value is exponentiated, the odds ratio is 0.252 and thus a student who has attended nursery may be 0.252 times as likely to be a binge drinker. This is logical as nursery attendance may be indicative of a positive external factor, as it is possible that a family's prioritization of education and possible aversion to binge drinking for children.
 
-Thus, in terms of external and familial factors impacting whether or not a student respondent is a school/workday binge drinker, we assess that there are only two significant variables, which are whether or not the student has extra paid math classes and whether the student has attended nursery school or not.
+For the traveltimei variable, the estimate was 2.758 with a p-value of 0.0023 and 95% CI between 1.43 and 5.38. As the estimate is exponentiated, the odds ratio for the variable is 2.758, indicating that a student who has a one unit increase in travel time to school, which is essentially a doubling of travel time based on the variable's parameters, the individual is 2.76 times as likely to be a binge drinker. This is interesting, as it shows that students who live farther away from school are far more likely to be binge drinkers.
+
+Thus, in terms of external and familial factors impacting whether or not a student respondent is a school/workday binge drinker, we assess that there are only three significant variables, which are whether or not the student has extra paid math classes, whether the student has attended nursery school or not, and the travel time of the student to school.
 
 ```{r logistic regression significant results, echo = FALSE}
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
@@ -111,9 +111,47 @@ tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
   print()
 ```
 
-# Training Data for Logistic Regression
+# Fit for Logistic Regression
+To assess how well our logistic model fits, we used the data set to create a training and testing data set. We used seed 0 and split the data 80% training and 20% test. For our small model, we considered only the three significant variables, extra tutoring, nursery attendance, and travel time. For the big model, we used the original model with all the original predictors, and for the small model, we used all the significant predictors that we had rejected the null hypothesis for.
+```{r overfitting setup, echo = FALSE, message = FALSE, results = 'hide'}
+set.seed(0)
 
-split data analysis here
+student_logit_fit1 <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(binger ~ extra_tutoring + attended_nursery + traveltime, data = student_logit, family = "binomial")
+  
+
+# Put 80% of the data into the training set 
+student_split <- initial_split(student_logit, prop = 0.80)
+# Create data frames for the two sets:
+train_data <- training(student_split)
+test_data  <- testing(student_split)
+
+binger_pred <- predict(student_logit_fit, test_data, type = "prob") %>%
+  bind_cols(test_data %>% select(binger))
+
+binger_pred1 <- predict(student_logit_fit1, test_data, type = "prob") %>%
+  bind_cols(test_data %>% select(binger))
+
+```
+
+
+```{r logit fit plots, echo = FALSE, message = FALSE, results = 'hide', fig.show='hide'}
+binger_pred %>%
+  roc_curve(truth = binger, .pred_Yes, event_level = "second") %>%
+  autoplot()
+
+binger_pred1 %>%
+  roc_curve(truth = binger, .pred_Yes, event_level = "second") %>%
+  autoplot()
+```
+```{r logit fit auc, echo = FALSE, results = 'hide'}
+binger_pred %>%
+  roc_auc(truth = binger, .pred_Yes, event_level = "second")
+binger_pred1 %>%
+  roc_auc(truth = binger, .pred_Yes, event_level = "second")
+```
+Unfortunately, we could not fit the charts on this final report, but we were able to find information about the area under the curve for each model. For the large model, the area under the curve is 0.974, indicating very good fit. For the smal model, the area under the curve is 0.686, which is not is great, but still better than just the estimate, which would be 0.50, or a random fit.
 
 # Multiple Linear Regression - Factors Influencing Workday Alcohol Consumption
 How does student life impact daily alcohol consumption?
@@ -131,7 +169,7 @@ In addition to building a multiple linear regression model, we also created a co
 
 # Linear regression analysis - Factors Influencing Workday Alcohol Consumption:
 
-```{r linear regression , echo = FALSE, message = FALSE }
+```{r linear regression, echo = FALSE, message = FALSE}
 student$activities_binary <- ifelse(student$activities == "yes", 1, 0)
 student$romantic_binary <- ifelse(student$romantic == "yes", 1, 0)
 model_regression<-linear_reg()%>%
@@ -205,16 +243,16 @@ With this regression model, the result shows us that a one unit increase in dail
 
 # Conclusion
 
-The logistic regression was able to answer our first research question regarding the importance of certain family and external factors in impacting whether a student was a workday alcohol binge drinker. From the logistic regression model, we discovered that amongst many family and external factors, including student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery school, only attendance of nursery school and additional paid math classes appeared to be significant. Moreover, if a student attended nursery school, he or she was 0.252 times as likely to be a binge drinker while if someone had additional paid math classes, he or she was 4.285 times as likely to be a binge drinker. 
+The logistic regression was able to answer our first research question regarding the importance of certain family and external factors in impacting whether a student was a workday alcohol binge drinker. From the logistic regression model, we discovered that amongst many family and external factors, including student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery school, only attendance of nursery school and additional paid math classes appeared to be significant. Moreover, if a student attended nursery school, he or she was 0.252 times as likely to be a binge drinker while if a student's travel time effectively doubled, then he or she would be 2.758 times as likely to be a binge drinker. Most significantly, if someone had additional paid math classes, he or she was 4.285 times as likely to be a binge drinker. Thus, there are only a few external factors involved in binge drinking, and how the variables are connected is to be further investigated.
 
-Through the regression analysis, we have found some significant factors that contribute to workday alcohol consumption. We found that an increase in freetime, going out with friends, and number of school absences can lead to an increase in weekday alcohol consumption. Moreover, we have seen that having good quality of family relationships and spending more time studying decreases weekday alcohol consumption. Furthermore, we found that workday alcohol consumption does not have a significant relationship with academic performance in terms of grades, but it does play a significant (in terms of p-value) role in the number of past class failures, although its actual impact is relatively small on that front.
+Through the regression analysis, we have found some significant factors that contribute to workday alcohol consumption. We found that an increase in freetime, going out with friends, and number of school absences can lead to an increase in weekday alcohol consumption. Moreover, we have seen that having good quality of family relationships and spending more time studying decreases weekday alcohol consumption. Furthermore, we found that workday alcohol consumption does not have a significant relationship with academic performance in terms of grades, but it does play a significant (in terms of p-value) role in the number of past class failures, although its actual impact is relatively small on that front. Thus, there are a few internal factors in one's personal life that contribute to workday alcohol consumption, and alcohol consumption is not very negatively impactful on academic performance.
 
 All of these results, however, need to be interpreted with caution as this data represents only a small subset of all secondary school students, as it was taken only taken in two secondary schools in a region of Portugal, and only addressed to math students in those two schools. For future analysis to better understand the relationships among family and external factors, alcohol consumption, and academic and personal life, further data needs to be collected from a wider populace with more random sampling. 
 
 To make further data analysis more compelling, there needs to be less subjectivity and greater objectivity in the variables, especially workday alcohol consumption. In this dataset, it is a self-reported value of very low to very high alcohol consumption, but this provides no bearing as to how many actual drinks someone is consuming, and weakens our current analyses of the relationships between workday alcohol consumption/workday alcohol binge drinking with other factors.
 
  
-#Citations: 
+# Citations: 
 
 P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
 
