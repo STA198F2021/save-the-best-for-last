@@ -151,7 +151,7 @@ binger_pred %>%
 binger_pred1 %>%
   roc_auc(truth = binger, .pred_Yes, event_level = "second")
 ```
-Unfortunately, we could not fit the charts on this final report, but we were able to find information about the area under the curve for each model. For the large model, the area under the curve is 0.974, indicating very good fit. For the smal model, the area under the curve is 0.686, which is not is great, but still better than just the estimate, which would be 0.50, or a random fit.
+Unfortunately, we could not fit the charts on this final report, but we were able to find information about the area under the curve for each model. For the large model, the area under the curve is 0.974, indicating very good fit. For the small model, the area under the curve is 0.686, which is not is great, but still better than just the estimate, which would be 0.50, or a random fit. Thus, although the large model contains many predictors that are not statistically significant, the large model is a very effective prediction model. This could be a result of the data regarding those predictors not being sufficiently large to provide greater insight into their statistical significance. Thus, since the small model is still a decent fit at 0.686, and the predictors are within our acceptable p-values, we will continue with our analysis that the variables of having paid math classes, attended nursery, and travel time to school as the statistically significant predictors for alcohol binge drinking.
 
 # Multiple Linear Regression - Factors Influencing Workday Alcohol Consumption
 How does student life impact daily alcohol consumption?
