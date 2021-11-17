@@ -8,11 +8,18 @@ output: pdf_document
 
 # Abstract
 
-
+  This report outlines the effects of alcohol consumption on students’ efficacy of learning and whether family circumstances play a role in the amount of alcohol consumed by these students. We used data from a dataset we found on Kaggle that was posted by UC Irvine. The dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. 
+  
+  To focus on the effect of alcohol consumption on student learning we used the variables relating to alcohol consumption. On the other hand, to focus on the family circumstances in comparison to alcohol consumption we used the variables related to alcohol consumption. With these variables, we built regression models to decide which attributes were significant to our findings. In addition, we used proper visual models to display our findings in a visual manner. 
+  
+  Our model shows that having extra paid classes within the course subject of math plays a significant factor in whether or not one drinks more often. In addition, our data showed that increased alcohol consumption also showed an increase in the amount of failed courses. 
+  
+  
 # Introduction
+
 There are many beliefs about the prevalence of student drinking and what sort of factors impact or are indicative of high levels of drinking as well as how drinking may impact individual academic performance. For our project, we will be studying two main questions with regard to alcohol consumption.
 
-The first question is what family or external circumstances are drivers for high student alcohol consumption. Insight into these impact of these factor may allow for a better understanding for how family education, support, size, and others may be associated with binge drinking.
+The first question is what family or external circumstances are drivers for high student alcohol consumption. Insight into the impacts of these factor may allow for a better understanding of how family education, support, size, and others may be associated with binge drinking.
 
 The second question we seek to answer is how student alcohol consumption correlates with student life whether it be through absences, class failures, marks received on exams, activities outside of school, or desire to attend university.
 
@@ -28,7 +35,8 @@ The methodologies and results for these analyses will be further described in th
 library(tidyverse)
 library(tidymodels)
 library(ggplot2)
-#setwd("/home/guest/R/project01")
+library(corrplot)
+#setwd("/home/guest/R/project1")
 
 #working directory is different based on user, just comment out the below line if you renamed the project
 # to anything else that's not save-the-best-for-last
@@ -84,6 +92,8 @@ student_logit_fit <- logistic_reg() %>%
 
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
 ```
+
+
 # Logistic Regression Analysis
 
 Upon completing the logistic regression, we found two variables to be significant at a p-value of 0.05, which were whether or not a student had extra tutoring or not (B8, coefficient for extra_tutoringi) and whether a student had attended nursery or not (coefficient for attended_nurseryi). All other estimates had much higher p-values, which were not close to being significant. Furthermore, we attempted to see how changing the level of education we identified as appropriate for our binary variables on parental education, but the p-value did not shift significantly (change from 0.58/0.60 to 0.66/0.80 for mother's education and father's education respectively).
@@ -101,6 +111,7 @@ tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
 ```
 
 
+
 #Clearing Missing Data
 ```{r cleaning data, echo = FALSE, message = FALSE}
 missingval <- is.na(student)
@@ -109,13 +120,13 @@ head(missingval)
 As you can see from this quick check. There are no missing values in our data. Therefore we can move on with further analysis and no clearing of variables needs to be done. I put only the head of the data because it was too long to visually see the whole thing however it is all false.
 
 #Data Wrangling
-There are two big questions that we want answered with this data set: whether a students average alcohol consumption is correlated with their family circumstances and whether alcohol consumption has an effect on student life. Lets first look at some geographics of our students.
+There are two big questions that we want answered with this data set: whether a students average alcohol consumption is correlated with their family circumstances and whether alcohol consumption has an effect on student life. Lets first look at some geographics of our students and adjust our data as needed to complete a through analysis. 
 ```{r geographics, echo = FALSE, message = FALSE}
 student%>%
   ggplot(aes(x = age)) +
   geom_boxplot()
 ```
- We can see from the data that the average age of the students tested was about 17 and there was an out liar at age 22. 
+We can see from the data that the average age of the students tested was about 17 and there was an out liar at age 22. 
  
 ```{r tables, echo = FALSE, message = FALSE}
 table(student$age)
@@ -132,9 +143,99 @@ table(student$guardian)
 table(student$famsup)
 table(student$internet)
 ```
+It is important to count some of the important variables in our data so we can see which variables had significant responses that need to be analyzed. 
+
+
+# Logistic Regression Analysis
+
+Upon completing the logistic regression, we found that only one variable to be significant at a p-value of 0.05, which was whether or not a student had extra tutoring or not (B8, coefficient for extra_tutoringi). However, another variable, which was B9 (coefficient for attended_nurseryi), had a p-value of 0.0682, which is very, very close. All other estimates had much higher p-values, which were not close to being significant. Furthermore, we attempted to see how changing the level of education we identified as appropriate for our binary variables on parental education, but the p-value did not shift significantly (change from 0.56/0.95 to 0.87/0.22 for mother's education and father's education respectively).
+
+Moving forward with the extra_tutoringi variable, the estimate came out to be 4.318 with a 95% CI between 1.64 and 12.96, which is an extremely wide range. Because the values are exponentiated, this indicates that the odds ratio for this value 4.318, which means that a student with extra paid math classes is 4.318 times as likely to be a binge drinker than someone who does not have extra paid math classes. This is quite interesting and contradicts our original thoughts regarding this variable that higher educational support through tutoring might indicate less likelihood for binge drinking. Some speculation as to why tutoring may be correlated with binge drinking is possibly due to a perceived need for tutoring for the respondent from the students' parents because of the drinking itself. 
+
+With regard to the attended_nurseryi variable, the estimate was 0.3911 with a 95% CI between 0.145 and 1.123. The CI is very wide and spans across 1. However, since the p-value of 0.0682 is fairly close to 1 and the upper bound for the CI is just above 1. Thus, we will proceed with caution on this variable as we analyze its results due to its closeness to significance. As this value is exponentiated, the odds ratio is 0.3911 and thus a student who has attended nursery may be 0.3911 times as likely to be a binge drinker. Although this value is not very significant, this is somewhat in line with our hypothesis that nursery attendance may be indicative of a family's prioritization of education and possible aversion to binge drinking for children.
+
+Thus, in terms of external and familial factors impacting whether or not a student respondent is a binge drinker, we assess that there is only one significant variable, which is whether or not the student has extra paid math classes. However, we can also proceed with caution on the variable regarding whether the student has attended nursery school or not because of the low p-value.
+
+```{r logistic regression significant results1, echo = FALSE}
+tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
+  filter(p.value < 0.07) %>%
+  print()
+```
+
+
+#Linear Regression 
+How does student life impact daily alcohol consumption?
+
+
+A multiple linear regression was run to understand how student life impacts alcohol consumption.  We use Dalc (daily alcohol consumption) as response variables and failures(number of past class failures ) , goout (going out with friends) , studytime (weekly study time ) , freetime (free time after school), famrel (quality of family relationships),  G1(first period grade) , G2 (second period grade), G3 ( third period grade)  and activities ( extra-curricular activities) as explanatory variables. 
+
+One thing to note is that daily alcohol consumption is a self-reported scale from 1-5, where 1 is "very low consumption" and 5 is "very high consumption." Studytime is scaled for 1 as < 2 hours, 2 is 2-5 hours, 3 is between 5 to 10 hours, and 4 is greater than 10 hours. Going out with friends, freetime, and family relationships are also a subjective scales while period grades are numerical 0 - 20. Activities is binary 0, 1.
+
+The linear regression used is the following one:
+Dalc= b0 + b1 * failures +b2 *  goout + b3 * studytime +b4 *  freetime +b5 * famrel+ b6 *  activities + b7* G1 +b8* G2+ b9 * G3 
+In this regression output, only goout, studytime, freetime and famrel were significant at 0.05. 
+The result tells us that an increase in daily alcohol consumption is positively correlated (correlation coefficient= 0.27) with going out with friends. The more frequently a student goes out with friends, the more the student drinks. A one unit increase in going out with friends increases daily alcohol consumption by 0.176.In this case, we can say that going out with friends impacts student daily alcohol consumption. Additionally,  Daily alcohol consumption is negatively correlated (correlation coefficient= 0.2 ) with studytime. In other words, the more students dedicate their time to studying, the less they consume alcohol. A one unit increase in studytime decreases alcohol consumption by 0.146. In short, spending more time studying decreases daily alcohol consumption. Furthermore, daily alcohol consumption is negatively correlated(correlation coefficient= 0.08) with the quality of family relationships. The higher the quality is, the less alcohol consumption is. A one unit increase in the quality of family relationships decreases daily alcohol consumption by 0.1.  Also, Daily alcohol consumption is positively correlated with freetime (correlation coefficient=0.21 ). The more students have free time, the more they consume alcohol. A one unit increase in freetime increase alcohol consumption by 0.13
+
+#Linear regression model:
+
+Dalc= 1.28 + 0.176 * goout + 0.146 * studytime + 0.1 * famrel + 0.13 *freetime
+ 
+```{r linear regression , echo = FALSE, message = FALSE }
+
+model_regression<-linear_reg()%>%
+set_engine("lm")%>%
+  fit(Dalc ~ failures + goout + studytime + freetime + famrel+ activities + G1 +G2+G3, data=student)
+print(tidy(model_regression))
+
+```
+
+#Showing relationship using correlation matrix
+ 
+ We create a new variable that shows that the average grade of the student using G1, G2, G3.
+```{r average grade, echo = FALSE, message = FALSE }
+student$avg_grade<-(student$G1 + student$G2 + student$G3)/3
+```
+ 
+Then we made a visualization of the coefficient correlation between Dalc and the other predictors. 
+
+```{r corrlation matrix, echo = FALSE, message = FALSE}
+new_student<-student%>%
+
+  select(c("Dalc","failures" , "goout", "studytime" , "freetime" ,"famrel", "avg_grade"))
+
+dalc_correlation<-cor(new_student)
+
+corrplot(dalc_correlation,method="ellipse", type = 'upper' )
+
+corrplot(dalc_correlation, method="number" , type="upper")
+
+
+```
+
+#Seocond linear model:
+
+failures= 0.11 * Dalc + 0.16
+ 
+With a p value of 0.006 less than 0.05, there is enough enough evidence to support that the true coefficient is not 0. 
+
+With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures. So, daily alcohol consumption impacts student average grade. The more students daily consume alcohol, the less , their average grade is.
+```{r alcohol consumption and failures, echo = FALSE, message = FALSE}
+
+model_dalc_failures<-linear_reg()%>%
+  set_engine("lm")%>%
+  fit(failures~Dalc, data=student)
+print(tidy(model_dalc_failures))
+
+
+```
+The logistic regression was able to answer our first research question regarding the importance of certain family and external factors in impacting whether a student was a workday alcohol binge drinker. From the logistic regression model, we discovered that amongst many family and external factors, including student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery school, only attendance of nursery school and additional paid math classes appeared to be significant. Moreover, if a student attended nursery school, he or she was 0.252 times as likely to be a binge drinker while if someone had additional paid math classes, he or she was 4.285 times as likely to be a binge drinker. 
+
+Through the regression analysis, we have found some important factors that contribute to weekday alcohol consumption. We found that  an increase in freetime and going out with friends lead to an increase in weekday alcohol consumption. Moreover, we have seen that having a good quality of family relationships and spending more time studying decreases weekday alcohol consumption. Furthermore, another take away from this analysis is that as students drink more, their number of past class failures increases. 
+
+All of these results, however, need to be interpreted with caution as this data represents only a small subset of all secondary school students, as it was taken only taken in two secondary schools in a region of Portugal, and only addressed to math students in those two schools. For future analysis to better understand the relationships among family and external factors, alcohol consumption, and academic and personal life, further data needs to be collected from a wider populace with more random sampling. 
 
  
-Citations: 
+#Citations: 
 
 P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
 
