@@ -113,18 +113,23 @@ tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
 
 
 #Clearing Missing Data
-```{r cleaning data, echo = FALSE, message = FALSE}
+```{r cleaning data, message = FALSE, results = 'hide'}
 missingval <- is.na(student)
 head(missingval)
 ```
-As you can see from this quick check. There are no missing values in our data. Therefore we can move on with further analysis and no clearing of variables needs to be done. I put only the head of the data because it was too long to visually see the whole thing however it is all false.
+There are no missing values in our data, and in the above code chunk, the result is no missing values. Therefore we can move on with further analysis and no clearing of variables needs to be done. I put only the head of the data because it was too long to visually see the whole thing however it is all false.
 
 #Data Wrangling
 There are two big questions that we want answered with this data set: whether a students average alcohol consumption is correlated with their family circumstances and whether alcohol consumption has an effect on student life. Lets first look at some geographics of our students and adjust our data as needed to complete a through analysis. 
 ```{r geographics, echo = FALSE, message = FALSE}
 student%>%
   ggplot(aes(x = age)) +
-  geom_boxplot()
+  geom_boxplot() +
+labs(
+    x = "Age",
+    y = NULL,
+    title = "Average Age of Students") 
+
 ```
 We can see from the data that the average age of the students tested was about 17 and there was an out liar at age 22. 
  
