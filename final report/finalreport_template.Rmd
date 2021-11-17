@@ -9,7 +9,13 @@ output: pdf_document
 ```{r read_data}
 library(tidyverse)
 library(tidymodels)
+library(ggplot2)
+#setwd("/home/guest/R/project01")
+
+#working directory is different based on user, just comment out the below line if you renamed the project
+# to anything else that's not save-the-best-for-last
 setwd('/home/guest/save-the-best-for-last')
+
 student <- readr::read_csv("data/student-mat.csv")
 
 student_binger <- student %>%
@@ -38,4 +44,40 @@ student_logit_fit <- logistic_reg() %>%
 
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
 ```
+
+#Clearing Missing Data
+```{r cleaning data}
+missingval <- is.na(student)
+head(missingval)
+```
+As you can see from this quick check. There are no missing values in our data. Therefore we can move on with further analysis and no clearing of variables needs to be done. I put only the head of the data because it was too long to visually see the whole thing however it is all false.
+
+#Data Wrangling
+There are two big questions that we want answered with this data set: whether a students average alcohol consumption is correlated with their family circumstances and whether alcohol consumption has an effect on student life. Lets first look at some geographics of our students.
+```{r geographics}
+student%>%
+  ggplot(aes(x = age)) +
+  geom_boxplot()
+```
+ We can see from the data that the average age of the students tested was about 17 and there was an out liar at age 22. 
+ 
+```{r tables}
+table(student$age)
+table(student$school)
+table(student$ sex)
+table(student$address)
+table(student$famsize)
+table(student$Pstatus)
+table(student$Medu)
+table(student$Fedu)
+table(student$Mjob)
+table(student$reason)
+table(student$guardian)
+table(student$famsup)
+table(student$internet)
+```
+
+ 
+
+
 
