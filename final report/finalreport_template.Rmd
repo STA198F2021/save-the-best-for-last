@@ -26,9 +26,9 @@ The second question we seek to answer is how student alcohol consumption correla
 In order to conduct our study of these two questions, we will be working with a dataset we found on Kaggle. The data was collected for a research paper called “Using Data Mining to Predict Secondary School Student Performance.” The authors describe how the surveys were developed and reviewed by school staff and students (Cortez et al 2). The surveys were then delivered to the students through paper questionnaires with predefined answer choices for 37 different questions, 33 of which are variables in the dataset (Cortez et a 2). The questionnaires were answered by all 395 math students in the Gabriel Pereira and Moushino da Silveira secondary public schools (Cortez et al 2). The secondary school students are what would be considered as "high school" in the United States, with age ranges from 15 - 19 years old, but with a few older individuals up to 22 years old. Additionally different from the United States is that the legal drinking age in Portugal is 18 years old, which is on the upper spectrum for secondary students. Thus, the drinking prevalence in this data set may not correlate to prevalence found in American high schools. However, this data may mirror drinking at the university level better, as to the 21 year age requirement in the US is in the upper age range for university students as is 18 in the upper age range for Portuguese secondary school students.
 
 # Overall Methodology
-In order to assess the first question, we modeled a logistic regression with binge drinking being the respondent variable and familial and external variables serving as the predictor variables. Through this analysis, we intend to understand the significance of certain family and external factors in impacting whether or not a student is a binge drinker and interpret the severity of impact of those variables. More specifically, we will be investigating the student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery as the explanatory variables. 
+In order to assess the first question, we modeled a logistic regression with binge drinking being the respondent variable and familial and external variables serving as the predictor variables. Through this analysis, we intend to understand the significance of certain family and external factors in impacting whether or not a student is a workday binge drinker and interpret the severity of impact of those variables. More specifically, we will be investigating the student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery as the explanatory variables with workday alcohol consumption (made binary) as the response variable.
 
-
+The methodologies and results for these analyses will be further described in their sections below.
 
 
 ```{r read_data, echo = FALSE, message = FALSE}
@@ -49,7 +49,7 @@ student <- readr::read_csv("data/student-mat.csv")
 
 We conducted a logistic regression to determine what sort of family or external factors may be drivers for student alcohol consumption. We decided to pursue a logistic regression in this case due to the categorical nature of many of the variables. Furthermore, we wanted to do a logistic regression on top of a linear regression, where instead of quantifying the amount of alcoholic drinks, we can assess how these indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker."
 
-Thus, in order to set up this logistic regression, we had to begin by transforming the daily alcoholic consumption value into a binary variable. This was done by using the mutate() function to create a new variable that said that an individual was considered a "binge drinker" or "binger" (variable name) based on their sex and drink count. Sex was an important indicator here since alcoholic consumption for intoxication can vary greatly based on sex. According to the National Institute on Alcohol Abuse and Alcoholism (NIAAA), binge drinking varies between males and females, where 4 or more drinks is for females and 5 or more drinks is for males (NIAAA). Furthermore, for youths, which is where we will categorize the students here, the drinks are 3 for girls and 3 to 5 for boys (NIAAA). Thus, from the NIAAA, we classified male student binge drinkers as consumers of 4 or more drinks and female student binge drinkers as consumers of 3 or more drinks.
+Thus, in order to set up this logistic regression, we had to begin by transforming the daily alcoholic consumption value into a binary variable. This was done by using the mutate() function to create a new variable that said that an individual was considered a "binge drinker" or "binger" (variable name) based on their self-reported drinking level. According to the National Institute on Alcohol Abuse and Alcoholism (NIAAA), binge drinking is defined as 4 or more drinks is for females and 5 or more drinks is for males (NIAAA). Furthermore, for youths, which is where we will categorize the students here, the drinks are 3 for girls and 3 to 5 for boys (NIAAA). However, for this dataset, the values 1-5 do not indicate the amount of drinks, but rather, a self-reported drinking level, where 1 is "very low" drinking and 5 is "very high" drinking. This is very arbitrary, but in order to create a more binary definition, we defined drinking levels of 4 and 5 (high and very high drinking) on workdays. We additionally focus on workday binge drinking as opposed to the other variable, which is weekend binge drinking, because workday binge drinking is more negatively stigmatized, and is a larger factor in a student's academic and family life than weekend binge drinking.
 
 Next, we had to select the predictor variables for our regression. Because we wanted to answer what sort of external or familial factors impact whether a student is a binge drinker, we used the following variables: residence, family size, parental separation, mother and father education level, educational support, family educational support, extra paid tutoring classes, and whether or not the student attended nursery school.
 
@@ -67,7 +67,7 @@ For the parental education, since this value was not originally binary, we asses
 
 ```{r logistic analysis, echo = FALSE, message = FALSE}
 student_binger <- student %>%
-   mutate(binger = ifelse(sex == "F", ifelse(Dalc >= 3,1,0), ifelse(Dalc >= 4, 1, 0)))
+   mutate(binger = ifelse(Dalc > 3,1,0))
 
 student_binger$binger=factor(student_binger$binger,levels=c(1,0),labels=c("Yes","No"))
 student_binger$binger=relevel(student_binger$binger, ref = "No")
@@ -90,6 +90,25 @@ student_logit_fit <- logistic_reg() %>%
 
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
 ```
+
+
+# Logistic Regression Analysis
+
+Upon completing the logistic regression, we found two variables to be significant at a p-value of 0.05, which were whether or not a student had extra tutoring or not (B8, coefficient for extra_tutoringi) and whether a student had attended nursery or not (coefficient for attended_nurseryi). All other estimates had much higher p-values, which were not close to being significant. Furthermore, we attempted to see how changing the level of education we identified as appropriate for our binary variables on parental education, but the p-value did not shift significantly (change from 0.58/0.60 to 0.66/0.80 for mother's education and father's education respectively).
+
+Moving forward with the extra_tutoringi variable, the estimate came out to be 4.285 with a p-value of 0.0122 and 95% CI between 1.45 and 14.73. Because the values are exponentiated, this indicates that the odds ratio for this value 4.285, which means that a student with extra paid math classes is 4.285 times as likely to be a binge drinker than someone who does not have extra paid math classes. This is quite interesting and contradicts our original thoughts regarding this variable that higher educational support through tutoring might indicate less likelihood for binge drinking. Some speculation as to why tutoring may be correlated with binge drinking is possibly due to a perceived need for tutoring for the respondent from the students' parents because of the drinking itself. 
+
+With regard to the attended_nurseryi variable, the estimate was 0.252 with a p-value of 0.0139 and 95% CI between 0.08 and 077. As this value is exponentiated, the odds ratio is 0.252 and thus a student who has attended nursery may be 0.252 times as likely to be a binge drinker. This is more in line with our hypothesis that nursery attendance may be indicative of a positive external factor, as it is possible that a family's prioritization of education and possible aversion to binge drinking for children.
+
+Thus, in terms of external and familial factors impacting whether or not a student respondent is a school/work day binge drinker, we assess that there are only two significant variables, which are whether or not the student has extra paid math classes and whether the student has attended nursery school or not.
+
+```{r logistic regression significant results, echo = FALSE}
+tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
+  filter(p.value < 0.05) %>%
+  print()
+```
+
+
 
 #Clearing Missing Data
 ```{r cleaning data, echo = FALSE, message = FALSE}
@@ -135,7 +154,7 @@ With regard to the attended_nurseryi variable, the estimate was 0.3911 with a 95
 
 Thus, in terms of external and familial factors impacting whether or not a student respondent is a binge drinker, we assess that there is only one significant variable, which is whether or not the student has extra paid math classes. However, we can also proceed with caution on the variable regarding whether the student has attended nursery school or not because of the low p-value.
 
-```{r logistic regression significant results, echo = FALSE}
+```{r logistic regression significant results1, echo = FALSE}
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
   filter(p.value < 0.07) %>%
   print()
@@ -148,7 +167,7 @@ How does student life impact daily alcohol consumption?
 
 A multiple linear regression was run to understand how student life impacts alcohol consumption.  We use Dalc (daily alcohol consumption) as response variables and failures(number of past class failures ) , goout (going out with friends) , studytime (weekly study time ) , freetime (free time after school), famrel (quality of family relationships),  G1(first period grade) , G2 (second period grade), G3 ( third period grade)  and activities ( extra-curricular activities) as explanatory variables. 
 The linear regression used is the following one:
-Dalc= b0 + b1 * failures +b2*  goout + b3 * studytime +b4 *  freetime +b5 * famrel+ b6 *  activities + b7* G1 +b8* G2+ b9 * G3 
+Dalc= b0 + b1 * failures +b2 *  goout + b3 * studytime +b4 *  freetime +b5 * famrel+ b6 *  activities + b7* G1 +b8* G2+ b9 * G3 
 In this regression output, only goout, studytime, freetime and famrel were significant at 0.05. 
 The result tells us that an increase in daily alcohol consumption is positively correlated (correlation coefficient= 0.27) with going out with friends. The more frequently a student goes out with friends, the more the student drinks. A one unit increase in going out with friends increases daily alcohol consumption by 0.176.In this case, we can say that going out with friends impacts student daily alcohol consumption. Additionally,  Daily alcohol consumption is negatively correlated (correlation coefficient= 0.2 ) with studytime. In other words, the more students dedicate their time to studying, the less they consume alcohol. A one unit increase in studytime decreases alcohol consumption by 0.146. In short, spending more time studying decreases daily alcohol consumption. Furthermore, daily alcohol consumption is negatively correlated(correlation coefficient= 0.08) with the quality of family relationships. The higher the quality is, the less alcohol consumption is. A one unit increase in the quality of family relationships decreases daily alcohol consumption by 0.1.  Also, Daily alcohol consumption is positively correlated with freetime (correlation coefficient=0.21 ). The more students have free time, the more they consume alcohol. A one unit increase in freetime increase alcohol consumption by 0.13
 
@@ -206,7 +225,7 @@ print(tidy(model_dalc_failures))
 ```
 
  
-Citations: 
+#Citations: 
 
 P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
 
