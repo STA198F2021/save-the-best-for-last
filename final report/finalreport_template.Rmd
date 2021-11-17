@@ -6,7 +6,7 @@ date: "11/12/2021"
 output: pdf_document
 ---
 
-```{r read_data}
+```{r read_data, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(tidymodels)
 library(ggplot2)
@@ -18,35 +18,71 @@ setwd('/home/guest/save-the-best-for-last')
 
 student <- readr::read_csv("data/student-mat.csv")
 
+```
+# Logistic Regression Methodology:
+
+We conducted a logistic regression to determine what sort of family or external factors may be drivers for student alcohol consumption. We decided to pursue a logistic regression in this case due to the categorical nature of many of the variables. Furthermore, we wanted to do a logistic regression on top of a linear regression, where instead of quantifying the amount of alcoholic drinks, we can assess how these indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker."
+
+Thus, in order to set up this logistic regression, we had to begin by transforming the daily alcoholic consumption value into a binary variable. This was done by using the mutate() function to create a new variable that said that an individual was considered a "binge drinker" or "binger" (variable name) based on their sex and drink count. Sex was an important indicator here since alcoholic consumption for intoxication can vary greatly based on sex. According to the National Institute on Alcohol Abuse and Alcoholism (NIAAA), binge drinking varies between males and females, where 4 or more drinks is for females and 5 or more drinks is for males (NIAAA). Furthermore, for youths, which is where we will categorize the students here, the drinks are 3 for girls and 3 to 5 for boys (NIAAA). Thus, from the NIAAA, we classified male student binge drinkers as consumers of 4 or more drinks and female student binge drinkers as consumers of 3 or more drinks.
+
+Next, we had to select the predictor variables for our regression. Because we wanted to answer what sort of external or familial factors impact whether a student is a binge drinker, we used the following variables: residence, family size, parental separation, mother and father education level, educational support, family educational support, extra paid tutoring classes, and whether or not the student attended nursery school.
+
+Thus, we developed the following logistic regression model:
+
+logit(pii) = log(pii/(1-pii)) = B0 + B1(urbani) + B2(famsmalli) + B3(parents_togetheri) + B4(mother_secondaryi) + B5(father_secondaryi) + B6(school_supporti) + B7(family_supporti) + B8(extra_tutoringi) + B9(attended nurseryi)
+
+such that
+
+urbani = 1 if the respondent lives in an urban environment, famsmalli = 1 if the family size is less than 3, parents_togetheri = 1 if the parents are together, mother_secondaryi = 1 if the mother's education level is secondary or above, father_secondaryi = 1 if the father's education level is secondary or above, school_supporti = 1 if the student is receiving school support, family_supporti = 1 if the student is receiving extra family support for education, extra_tutoringi = 1 if the student is receiving extra paid classes within math, and attended_nurseryi = 1 if the student attended nursery school before.
+
+For these variables, we curated them so that for the values equal to 1, we hypothesized those values would be most involved in influencing a student to not be a binge drinker because we believe those to be positive familial or external attributes in one's life that may influence one to avoid binge drinking.
+
+For the parental education, since this value was not originally binary, we assessed that it would be most relevant to assess whether or not the education level was secondary or not since if the respondent's parents had reached the at least the same level of education as the respondent him/herself, then there would be some likelihood of greater parental support due to them having shared the same experiences. Regardless, as we will explain in the next section, switching the value to be higher than secondary education makes no impact.
+
+```{r logistic analysis, echo = FALSE, message = FALSE}
 student_binger <- student %>%
    mutate(binger = ifelse(sex == "F", ifelse(Dalc >= 3,1,0), ifelse(Dalc >= 4, 1, 0)))
 
 student_binger$binger=factor(student_binger$binger,levels=c(1,0),labels=c("Yes","No"))
 student_binger$binger=relevel(student_binger$binger, ref = "No")
 
-```
-
-```{r logistic analysis}
 student_logit <- student_binger %>%
   mutate(urban = ifelse(address == "U", 1, 0)) %>%
-  mutate(famlarge = ifelse(famsize == "GT3", 1, 0)) %>%
+  mutate(famsmall = ifelse(famsize == "LE3", 1, 0)) %>%
   mutate(parents_together = ifelse(Pstatus == "T", 1, 0)) %>%
   mutate(mother_secondary = ifelse(Medu >= 3, 1, 0)) %>%
   mutate(father_secondary = ifelse(Fedu >= 3, 1, 0)) %>%
   mutate(school_support = ifelse(schoolsup == "yes", 1, 0)) %>%
   mutate(family_support = ifelse(famsup == "yes", 1, 0)) %>%
   mutate(extra_tutoring = ifelse(paid == "yes", 1, 0)) %>%
-  mutate(alcoholic = ifelse(binger == "Yes", 1, 0))
+  mutate(alcoholic = ifelse(binger == "Yes", 1, 0)) %>%
+  mutate(attended_nursery = ifelse(nursery == "yes", 1, 0))
 
 student_logit_fit <- logistic_reg() %>%
   set_engine("glm") %>%
-  fit(binger ~ urban + famlarge + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring, data = student_logit, family = "binomial")
+  fit(binger ~ urban + famsmall + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring + attended_nursery, data = student_logit, family = "binomial")
 
 tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
 ```
+# Logistic Regression Analysis
+
+Upon completing the logistic regression, we found that only one variable to be significant at a p-value of 0.05, which was whether or not a student had extra tutoring or not (B8, coefficient for extra_tutoringi). However, another variable, which was B9 (coefficient for attended_nurseryi), had a p-value of 0.0682, which is very, very close. All other estimates had much higher p-values, which were not close to being significant. Furthermore, we attempted to see how changing the level of education we identified as appropriate for our binary variables on parental education, but the p-value did not shift significantly (change from 0.56/0.95 to 0.87/0.22 for mother's education and father's education respectively).
+
+Moving forward with the extra_tutoringi variable, the estimate came out to be 4.318 with a 95% CI between 1.64 and 12.96, which is an extremely wide range. Because the values are exponentiated, this indicates that the odds ratio for this value 4.318, which means that a student with extra paid math classes is 4.318 times as likely to be a binge drinker than someone who does not have extra paid math classes. This is quite interesting, and contradicts our original thoughts regarding this variable that higher educational support through tutoring might indicate less likelihood for binge drinking. Some speculation as to why tutoring may be correlated with binge drinking is possibly due to a perceived need for tutoring for the respondent from the students' parents because of the drinking itself. 
+
+With regard to the attended_nurseryi variable, the estimate was 0.3911 with a 95% CI between 0.145 and 1.123. The CI is very wide and spans across 1. However, since the p-value of 0.0682 is fairly close to 1 and the upper bound for the CI is just above 1. Thus, we will proceed with caution on this variable as we analyze its results due to its closeless to significance. As this value is exponentiated, the odds ratio is 0.3911 and thus a student who has attended nursery may be 0.3911 times as likely to be a binge drinker. Although this value is not very significant, this is somewhat in line with our hypothesis that nursery attendance may be indicative of a family's prioritization of education and possible aversion to binge drinking for children.
+
+Thus, in terms of external and familial factors impacting whether or not a student respondent is a binge drinker, we assess that there is only one significant variable, which is whether or not the student has extra paid math classes. However, we can also proceed with caution on the variable regarding whether the student has attended nursery school or not because of the low p-value. 
+
+
+
+```{r odds ratio table}
+
+```
+
 
 #Clearing Missing Data
-```{r cleaning data}
+```{r cleaning data, echo = FALSE, message = FALSE}
 missingval <- is.na(student)
 head(missingval)
 ```
@@ -54,14 +90,14 @@ As you can see from this quick check. There are no missing values in our data. T
 
 #Data Wrangling
 There are two big questions that we want answered with this data set: whether a students average alcohol consumption is correlated with their family circumstances and whether alcohol consumption has an effect on student life. Lets first look at some geographics of our students.
-```{r geographics}
+```{r geographics, echo = FALSE, message = FALSE}
 student%>%
   ggplot(aes(x = age)) +
   geom_boxplot()
 ```
  We can see from the data that the average age of the students tested was about 17 and there was an out liar at age 22. 
  
-```{r tables}
+```{r tables, echo = FALSE, message = FALSE}
 table(student$age)
 table(student$school)
 table(student$ sex)
@@ -78,6 +114,6 @@ table(student$internet)
 ```
 
  
-
+Citation: https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/underage-drinking
 
 
