@@ -6,6 +6,24 @@ date: "11/12/2021"
 output: pdf_document
 ---
 
+# Abstract
+
+
+# Introduction
+There are many beliefs about the prevalence of student drinking and what sort of factors impact or are indicative of high levels of drinking as well as how drinking may impact individual academic performance. For our project, we will be studying two main questions with regard to alcohol consumption.
+
+The first question is what family or external circumstances are drivers for high student alcohol consumption. Insight into these impact of these factor may allow for a better understanding for how family education, support, size, and others may be associated with binge drinking.
+
+The second question we seek to answer is how student alcohol consumption correlates with student life whether it be through absences, class failures, marks received on exams, activities outside of school, or desire to attend university.
+
+In order to conduct our study of these two questions, we will be working with a dataset we found on Kaggle. The data was collected for a research paper called “Using Data Mining to Predict Secondary School Student Performance.” The authors describe how the surveys were developed and reviewed by school staff and students (Cortez et al 2). The surveys were then delivered to the students through paper questionnaires with predefined answer choices for 37 different questions, 33 of which are variables in the dataset (Cortez et a 2). The questionnaires were answered by all 395 math students in the Gabriel Pereira and Moushino da Silveira secondary public schools (Cortez et al 2). The secondary school students are what would be considered as "high school" in the United States, with age ranges from 15 - 19 years old, but with a few older individuals up to 22 years old. Additionally different from the United States is that the legal drinking age in Portugal is 18 years old, which is on the upper spectrum for secondary students. Thus, the drinking prevalence in this data set may not correlate to prevalence found in American high schools. However, this data may mirror drinking at the university level better, as to the 21 year age requirement in the US is in the upper age range for university students as is 18 in the upper age range for Portuguese secondary school students.
+
+# Overall Methodology
+In order to assess the first question, we modeled a logistic regression with binge drinking being the respondent variable and familial and external variables serving as the predictor variables. Through this analysis, we intend to understand the significance of certain family and external factors in impacting whether or not a student is a binge drinker and interpret the severity of impact of those variables. More specifically, we will be investigating the student's residence, family size, parental separation, mother and father education levels, school support, family support, additional paid math classes, and attendance of nursery as the explanatory variables. 
+
+
+
+
 ```{r read_data, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(tidymodels)
@@ -114,6 +132,12 @@ table(student$internet)
 ```
 
  
-Citation: https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/underage-drinking
+Citations: 
+
+P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
+
+“Underage Drinking.” National Institute on Alcohol Abuse and Alcoholism, U.S. Department of Health and Human Services, https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/underage-drinking. 
+
+
 
 
