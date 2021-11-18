@@ -18,6 +18,7 @@ setwd("/home/guest/R/save-the-best-for-last-one")
 ```
 
 ## R Markdown
+iii
 
 This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
@@ -27,6 +28,8 @@ When you click the **Knit** button a document will be generated that includes bo
 
 - Bullet 1
 - Bullet 2
+
+
 - Bullet 3
 
 ---
