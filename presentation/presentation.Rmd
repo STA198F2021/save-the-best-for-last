@@ -61,8 +61,10 @@ Table_variables = data.frame(Variable_name,Details)
 ```
 
 ```{r }
-setwd("/home/guest/save-the-best-for-last")
+#setwd("/home/guest/save-the-best-for-last")
+setwd("/home/guest/R/project-1")
 student <- readr::read_csv("data/student-mat.csv")
+
 ```
 
 
