@@ -1,0 +1,194 @@
+---
+title: 'Student life and family circumstances that affect alcohol consumption'
+
+author: "Colin Lee, Danielle Mensah and Haby Sow"
+
+
+date: "19/11/2021"
+
+
+output: powerpoint_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(tidymodels)
+
+```
+
+## R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+---
+
+Introduction
+
+This presentation outlines student life and first family circumstances that impact student alcohol consumption and the effect of alcohol consumption on student's efficacy of learning. 
+
+---
+
+---
+Background 
+
+The effects of alcohol consumption on personal health and cognition  the main area of interest for many researchers. In this research, on one hand, we will focus on other factors, such as family and the environment that impact student alcohol consumption and one the other hand,we will look at the effect of alcohol consumption on student performance in math. 
+---
+
+---
+Data Sources 
+
+Found on Kaggle, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
+----
+---
+Data presentation
+
+In addition to demographic and geographic information such as school name, address, sex, age, and  family size, our data contains relevant information needed to accomplish the analysis. See the table below:
+---
+```{r}
+Variable_name<-c("Dalc","Walc","famrel","Pstatus","Medu","Fedu","romantic","Mjob",
+                 "Fjob", "guardian" ,"famsup","absences","failures","activities","goout", "G1" ,"G2" ,"G3","freetime","studytime")
+
+Details<-c("Weekday alcohol consumption","Weekend alcohol consumption","Quality of family relationships", "Parent’s cohabitation","Mother’s education","Father’s education","With a romantic relationship","Mother’s job","Father’s job","Student’s guardian","Family support","Number of absences","Number of past class failures","Extra-curricular activities" , "Going out with friends","First period grade","Second period grade", "Third period grade","Hours of freet time","Hours of study")
+
+Table_variables = data.frame(Variable_name,Details)
+
+```
+
+```{r}
+setwd("/home/guest/R/save-the-best-for-last-one")
+
+student <- readr::read_csv("data/student-mat.csv")
+
+```
+
+
+
+
+```{r echo=TRUE}
+library(tidyverse)
+
+Table_variables%>%
+  knitr::kable()
+```
+---
+
+Methodology 
+
+Logistic Regression Choice
+
+A logistic regression was conducted to determine what sort of family or external factors may be drivers for student alcohol consumption. 
+This decision was made in context of categorical nature of many of the variables.These indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker.
+----
+
+---
+Logistic Regression model 
+Thus, in order to set up this logistic regression, we had to begin by transforming the weekday alcoholic consumption (Dalc) value into a binary variable and other transformation of some explanatory variables as well. The logistic regression model is the following one:
+
+logit(pii) = log(pii/(1-pii)) = B0 + B1(urbani) + B2(famsmalli) + B3(parents_togetheri) + B4(mother_secondaryi) + B5(father_secondaryi) + B6(school_supporti) + B7(family_supporti) + B8(extra_tutoringi) + B9(attended_nurseryi) + B10(internet_accessi) + B11(traveltimei
+
+----
+
+
+```{r logistic analysis, echo = FALSE, message = FALSE}
+student_binger <- student %>%
+   mutate(binger = ifelse(Dalc > 3,1,0))
+
+student_binger$binger=factor(student_binger$binger,levels=c(1,0),labels=c("Yes","No"))
+student_binger$binger=relevel(student_binger$binger, ref = "No")
+
+student_logit <- student_binger %>%
+  mutate(urban = ifelse(address == "U", 1, 0)) %>%
+  mutate(famsmall = ifelse(famsize == "LE3", 1, 0)) %>%
+  mutate(parents_together = ifelse(Pstatus == "T", 1, 0)) %>%
+  mutate(mother_secondary = ifelse(Medu >= 3, 1, 0)) %>%
+  mutate(father_secondary = ifelse(Fedu >= 3, 1, 0)) %>%
+  mutate(school_support = ifelse(schoolsup == "yes", 1, 0)) %>%
+  mutate(family_support = ifelse(famsup == "yes", 1, 0)) %>%
+  mutate(extra_tutoring = ifelse(paid == "yes", 1, 0)) %>%
+  mutate(attended_nursery = ifelse(nursery == "yes", 1, 0)) %>%
+  mutate(internetaccess = ifelse(internet == "yes", 1, 0))
+
+student_logit_fit <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(binger ~ urban + famsmall + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring + attended_nursery + internetaccess + traveltime, data = student_logit, family = "binomial")
+
+tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
+
+
+```
+
+```{r logistic regression significant results, echo = FALSE}
+Result<-tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
+  print()
+  
+```
+
+
+```{r echo=TRUE}
+library(tidyverse)
+
+Result%>%
+  knitr::kable()
+```
+
+```{r}
+Result<-tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
+  filter(p.value < 0.05) %>%
+  print()
+```
+```{r echo=TRUE}
+library(tidyverse)
+
+Result%>%
+  knitr::kable()
+```
+
+
+---
+
+Result communication
+
+In terms of external and familial factors impacting whether or not a student respondent is a school/workday binge drinker, we assess that there are only three significant variables, which are whether or not the student has extra paid math classes, whether the student has attended nursery school or not, and the travel time of the student to school. 
+----
+
+----
+A student with extra paid math classes is 4.285 times as likely to be a binge drinker than someone who does not have extra paid math classes.
+
+A student  who has attended nursery may be 0.252 times as likely to be a binge drinker. That is ,this student is less likely to be a binge drinker. 
+
+A student who has a one unit increase in travel time to school is 2.76 times as likely to be a binge drinker. That, this student is more likely to be a binge drinker
+----
+
+---
+Assessing model fit
+
+For the large model, the area under the curve is 0.974, indicating very good fit. For the small model, the area under the curve is 0.686, which is not is great, but still better than just the estimate, which would be 0.50, or a random fit.
+---
+
+
+```{r}
+Model<-c("Large","Small")
+Metric<-c("roc_auc","roc_auc")
+Estimator<-c("binary","binary")
+Estimate<-c("0.9615385","0.6089744")
+
+table_result<-data.frame( Model , Metric ,  Estimator, Estimate)
+```
+
+
+
+```{r echo=TRUE}
+library(tidyverse)
+
+table_result%>%
+  knitr::kable()
+```
