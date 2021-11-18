@@ -37,12 +37,12 @@ library(tidyverse)
 library(tidymodels)
 library(ggplot2)
 library(corrplot)
-#setwd("/home/guest/R/project1")
+#setwd("/home/guest/R/project-1")
 
 #working directory is different based on user, just comment out the below line if you renamed the project
 # to anything else that's not save-the-best-for-last
-#setwd('/home/guest/save-the-best-for-last')
-setwd("/home/guest/R/save-the-best-for-last-one")
+setwd('/home/guest/save-the-best-for-last')
+#setwd("/home/guest/R/save-the-best-for-last-one")
 
 student <- readr::read_csv("data/student-mat.csv")
 
@@ -51,7 +51,7 @@ student <- readr::read_csv("data/student-mat.csv")
 
 We conducted a logistic regression to determine what sort of family or external factors may be drivers for student alcohol consumption. We decided to pursue a logistic regression in this case due to the categorical nature of many of the variables. Furthermore, we wanted to do a logistic regression on top of a linear regression, where instead of quantifying the amount of alcoholic drinks, we can assess how these indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker."
 
-Thus, in order to set up this logistic regression, we had to begin by transforming the daily alcoholic consumption value into a binary variable.According to the National Institute on Alcohol Abuse and Alcoholism (NIAAA), binge drinking is defined as 4 or more drinks is for females and 5 or more drinks is for males (NIAAA). Furthermore, for youths, which is where we will categorize the students here, the drinks are 3 for girls and 3 to 5 for boys (NIAAA). However, for this dataset, the values 1-5 do not indicate the amount of drinks, but rather, a self-reported drinking level, where 1 is "very low" drinking and 5 is "very high" drinking. This is very arbitrary, but in order to create a more binary definition, we defined drinking levels of 4 and 5 (high and very high drinking) on workdays. We additionally focus on workday binge drinking as opposed to the other variable, which is weekend binge drinking, because workday binge drinking is more negatively stigmatized, and is a larger factor in a student's academic and family life than weekend binge drinking.
+Thus, in order to set up this logistic regression, we had to begin by transforming the daily alcoholic consumption value into a binary variable. According to the National Institute on Alcohol Abuse and Alcoholism (NIAAA), binge drinking is defined as 4 or more drinks is for females and 5 or more drinks is for males (NIAAA). Furthermore, for youths, which is where we will categorize the students here, the drinks are 3 for girls and 3 to 5 for boys (NIAAA). However, for this dataset, the values 1-5 do not indicate the amount of drinks, but rather, a self-reported drinking level, where 1 is "very low" drinking and 5 is "very high" drinking. This is very arbitrary, but in order to create a more binary definition, we defined drinking levels of 4 and 5 (high and very high drinking) on workdays. We additionally focus on workday binge drinking as opposed to the other variable, which is weekend binge drinking, because workday binge drinking is more negatively stigmatized, and is a larger factor in a student's academic and family life than weekend binge drinking.
 
 Thus, in order to create this binary variable, we created an additional variable called "binger" with the mutate() function, where 1 represents someone who self-reported a workday drinking level of 4 or 5 (high and very high drinking level) and 0 represented moderate, low, or very low drinking levels. Furthermore, we factored the data to "Yes" and "No" for binge drinker and not binge drinker, respectively, and then we releveled the data to make non-binge drinkers the referent group. We made non-binge drinkers the referent group because that should be the norm, and we want to observe how binge drinkers compare with non-binge drinkers.
 
@@ -209,7 +209,13 @@ It is extremely important to proceed with caution in interpreting the analysis o
 Thus, our multiple linear regression model takes the following form:
 Dalc= 1.28 + 0.176(goout) + 0.146(studytime) + 0.1(famrel) + 0.13(freetime)
 
-```{r R adjusted, histogram of residuals and rmse,echo = FALSE, message = FALSE}
+```{r R adjusted, histogram of residuals and rmse,echo = FALSE, message = FALSE, results = 'hide'}
+# Put 80% of the data into the training set 
+student_split_mlr <- initial_split(student)
+# Create data frames for the two sets:
+train_data_mlr <- training(student_split_mlr)
+test_data_mlr  <- testing(student_split_mlr)
+
 glance(model_regression)$adj.r.squared
 
 model_regression_follow<-augment(model_regression$fit)
@@ -221,8 +227,15 @@ ggplot(data=model_regression_follow, aes(x = model_regression_follow$.resid)) +
 
 ggplot(model_regression_follow, mapping=aes (x=.fitted, y=.resid)) + geom_point(alpha=0.5)
 
-RMSE<-sqrt(mean((model_regression_follow$Dalc - model_regression_follow$.fitted)^2))
-RMSE
+mlr_train_pred <- predict(model_regression, train_data_mlr) %>%
+  bind_cols(train_data_mlr %>% select(Dalc))
+rmse(mlr_train_pred, truth = Dalc, estimate = .pred)
+rsq(mlr_train_pred, truth = Dalc, estimate = .pred)
+
+mlr_test_pred <- predict(model_regression, test_data_mlr) %>%
+  bind_cols(test_data_mlr %>% select(Dalc))
+rmse(mlr_test_pred, truth = Dalc, estimate = .pred)
+rsq(mlr_test_pred, truth = Dalc, estimate = .pred)
 
 mean_res<-mean(model_regression_follow$.resid)
 mean_res
@@ -230,14 +243,15 @@ mean_res
 ```
 
 
-The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the data is explained by our linear model. 
+The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the response variable is explained by our linear model, which is relatively low, indicating how our model may not be a good predictor for variation in workday alcohol consumption. 
 
-The RMSE (Root Mean Square Error) is estimated to 0.82. This is relatively low which means that our model is a good fit and hence, the variables goout, studytime, famrel and freetime are good predictors of student workday alcohol consumption. 
+For our RMSE and R^2 analysis, to assess the performance of our model, we split the student data into 75% training and 25% testing data. We then evaluated the RMSE and R^2 of our model for the training and testing data, and found the RMSE and R^2 for the training data to be 0.788 and 0.150 respectively and the RMSE and R^2 value for the testing data to be 0.937 and 0.153 respectively. The RMSE is lower for the training data by a significant amount, which makes sense since the model is built for the training data set. The R^2 essentially remained the same (increased very slightly) from the training set to the test set, indicating the model does not degrade so much with data beyond the training data set, so we can evaluate that the model has good performance and fit.
 
 The histogram of the residual is approximately symmetric which satisfies the condition of normality for linear regression. The mean of the residuals (-1.38079e-16) which is enough close to 0 to strengthen our linear regression model.
 
 However, though the conditions of normality was satisfied, looking at the residual plot, the conditions of independence was not satisfied due to an identified pattern of the residuals. Residuals are linearly distributed which shows some flaws of our linear regression model.Moreover, the conditions of homoscedasticity was not satisfied because residual points are not constant. In some regions of the plot, residual points are more compacted than in other. 
-Overall, we can conclude that the linear regression model we used is good at predicting student workday alcohol consumption but it is important to note that our linear model is perfect due the lack of satisfaction of some assumption for linearity.
+
+Overall, we can conclude that the linear regression model we used is competent at predicting student workday alcohol consumption due to our performance analyses. It is important to note that our linear model is not perfect due the lack of satisfaction of some assumption for linearity and low R^2 adjusted. 
 
 
 
