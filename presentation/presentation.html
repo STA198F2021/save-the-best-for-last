@@ -1,263 +1,498 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Presentation title</title>
+    <title>Student life and family circumstances that affect alcohol consumption</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Team name   Names of team members" />
-    <meta name="date" content="2021-10-06" />
-    <script src="libs/header-attrs-2.9/header-attrs.js"></script>
+    <meta name="author" content="Colin Lee, Danielle Mensah and Haby Sow" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Presentation title
-## Presentation subtitle (if any)
-### Team name <br> Names of team members
-### Duke University
-### 2021-10-06
+# Student life and family circumstances that affect alcohol consumption
+### Colin Lee, Danielle Mensah and Haby Sow
+### 19/11/2021
 
 ---
 
 
 
 
+## R Markdown
+iii
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see &lt;http://rmarkdown.rstudio.com&gt;.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
 
 
-
-
-
-
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-## xaringan
-
-- The presentation is created using the `xaringan` package
-
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
+- Bullet 3
 
 ---
 
-## Layouts
+Introduction
 
-You can use plain text
+This presentation outlines student life and first family circumstances that impact student alcohol consumption and the effect of alcohol consumption on student's efficacy of learning. 
 
-- or bullet points
-
-.pull-left[
-or text in two columns `\(^*\)`
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
 
 ---
+Background 
 
-## Code
+The effects of alcohol consumption on personal health and cognition  the main area of interest for many researchers. In this research, on one hand, we will focus on other factors, such as family and the environment that impact student alcohol consumption and one the other hand,we will look at the effect of alcohol consumption on student performance in math. 
+---
+Data Sources 
+Found on Kaggle, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
+----
+Data presentation
+
+In addition to demographic and geographic information such as school name, address, sex, age, and  family size, our data contains relevant information needed to accomplish the analysis. See the table below:
+
+
+
+
+```
+## Rows: 395 Columns: 33
+```
+
+```
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr (17): school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardi...
+## dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
+```
+
+```
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+
+
 
 
 ```r
-# a boring regression
-model &lt;- lm(dist ~ speed, data = cars)
-tidy(model)
+library(tidyverse)
+Table_variables%&gt;%
+  knitr::kable()
 ```
+
+
+
+|Variable_name |Details                         |
+|:-------------|:-------------------------------|
+|Dalc          |Weekday alcohol consumption     |
+|Walc          |Weekend alcohol consumption     |
+|famrel        |Quality of family relationships |
+|Pstatus       |Parent’s cohabitation           |
+|Medu          |Mother’s education              |
+|Fedu          |Father’s education              |
+|romantic      |With a romantic relationship    |
+|Mjob          |Mother’s job                    |
+|Fjob          |Father’s job                    |
+|guardian      |Student’s guardian              |
+|famsup        |Family support                  |
+|absences      |Number of absences              |
+|failures      |Number of past class failures   |
+|activities    |Extra-curricular activities     |
+|goout         |Going out with friends          |
+|G1            |First period grade              |
+|G2            |Second period grade             |
+|G3            |Third period grade              |
+|freetime      |Hours of freet time             |
+|studytime     |Hours of study                  |
+---
+
+Methodology 
+
+Logistic Regression Choice
+
+A logistic regression was conducted to determine what sort of family or external factors may be drivers for student alcohol consumption. 
+This decision was made in context of categorical nature of many of the variables.These indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker.
+----
+Logistic Regression model 
+Thus, in order to set up this logistic regression, we had to begin by transforming the weekday alcoholic consumption (Dalc) value into a binary variable and other transformation of some explanatory variables as well. 
+---
+The logistic regression model is the following one:
+logit(pii) = log(pii/(1-pii)) = B0 + B1(urbani) + B2(famsmalli) + B3(parents_togetheri) + B4(mother_secondaryi) + B5(father_secondaryi) + B6(school_supporti) + B7(family_supporti) + B8(extra_tutoringi) + B9(attended_nurseryi) + B10(internet_accessi) + B11(traveltimei
+
+
+
+
+```
+## # A tibble: 12 × 7
+##    term             estimate std.error statistic p.value conf.low conf.high
+##    &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 (Intercept)        0.0115     1.36     -3.27  0.00106 0.000613     0.139
+##  2 urban              1.67       0.667     0.768 0.443   0.491        7.04 
+##  3 famsmall           1.09       0.577     0.149 0.882   0.328        3.27 
+##  4 parents_together   0.336      0.733    -1.49  0.137   0.0861       1.67 
+##  5 mother_secondary   1.63       0.642     0.766 0.444   0.466        5.92 
+##  6 father_secondary   0.816      0.608    -0.333 0.739   0.248        2.75 
+##  7 school_support     1.70       0.735     0.719 0.472   0.334        6.51 
+##  8 family_support     0.772      0.577    -0.449 0.654   0.254        2.52 
+##  9 extra_tutoring     5.77       0.640     2.74  0.00616 1.78        22.7  
+## 10 attended_nursery   0.246      0.574    -2.44  0.0145  0.0786       0.773
+## 11 internetaccess     1.14       0.828     0.153 0.878   0.262        7.92 
+## 12 traveltime         2.76       0.333     3.05  0.00228 1.43         5.38
+```
+
+
+```
+## # A tibble: 12 × 7
+##    term             estimate std.error statistic p.value conf.low conf.high
+##    &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 (Intercept)        0.0115     1.36     -3.27  0.00106 0.000613     0.139
+##  2 urban              1.67       0.667     0.768 0.443   0.491        7.04 
+##  3 famsmall           1.09       0.577     0.149 0.882   0.328        3.27 
+##  4 parents_together   0.336      0.733    -1.49  0.137   0.0861       1.67 
+##  5 mother_secondary   1.63       0.642     0.766 0.444   0.466        5.92 
+##  6 father_secondary   0.816      0.608    -0.333 0.739   0.248        2.75 
+##  7 school_support     1.70       0.735     0.719 0.472   0.334        6.51 
+##  8 family_support     0.772      0.577    -0.449 0.654   0.254        2.52 
+##  9 extra_tutoring     5.77       0.640     2.74  0.00616 1.78        22.7  
+## 10 attended_nursery   0.246      0.574    -2.44  0.0145  0.0786       0.773
+## 11 internetaccess     1.14       0.828     0.153 0.878   0.262        7.92 
+## 12 traveltime         2.76       0.333     3.05  0.00228 1.43         5.38
+```
+
+
+
+```r
+library(tidyverse)
+Result%&gt;%
+  knitr::kable()
+```
+
+
+
+|term             |  estimate| std.error|  statistic|   p.value|  conf.low|  conf.high|
+|:----------------|---------:|---------:|----------:|---------:|---------:|----------:|
+|(Intercept)      | 0.0114809| 1.3645129| -3.2737447| 0.0010613| 0.0006131|  0.1386366|
+|urban            | 1.6688831| 0.6669044|  0.7679580| 0.4425121| 0.4906650|  7.0354808|
+|famsmall         | 1.0898462| 0.5774164|  0.1490026| 0.8815516| 0.3280724|  3.2713828|
+|parents_together | 0.3360665| 0.7330300| -1.4875877| 0.1368597| 0.0861486|  1.6711355|
+|mother_secondary | 1.6346218| 0.6416984|  0.7657982| 0.4437964| 0.4659851|  5.9238787|
+|father_secondary | 0.8164724| 0.6083885| -0.3332774| 0.7389249| 0.2476953|  2.7533148|
+|school_support   | 1.6966845| 0.7350288|  0.7192590| 0.4719814| 0.3335768|  6.5055546|
+|family_support   | 0.7719339| 0.5767873| -0.4487901| 0.6535831| 0.2540548|  2.5249038|
+|extra_tutoring   | 5.7669531| 0.6396975|  2.7390193| 0.0061623| 1.7780366| 22.6671841|
+|attended_nursery | 0.2458926| 0.5739653| -2.4441553| 0.0145192| 0.0785800|  0.7728702|
+|internetaccess   | 1.1353805| 0.8280841|  0.1533272| 0.8781403| 0.2619882|  7.9215281|
+|traveltime       | 2.7582654| 0.3325564|  3.0509169| 0.0022814| 1.4294986|  5.3767426|
+
+
+```
+## # A tibble: 4 × 7
+##   term             estimate std.error statistic p.value conf.low conf.high
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)        0.0115     1.36      -3.27 0.00106 0.000613     0.139
+## 2 extra_tutoring     5.77       0.640      2.74 0.00616 1.78        22.7  
+## 3 attended_nursery   0.246      0.574     -2.44 0.0145  0.0786       0.773
+## 4 traveltime         2.76       0.333      3.05 0.00228 1.43         5.38
+```
+
+```r
+library(tidyverse)
+Result%&gt;%
+  knitr::kable()
+```
+
+
+
+|term             |  estimate| std.error| statistic|   p.value|  conf.low|  conf.high|
+|:----------------|---------:|---------:|---------:|---------:|---------:|----------:|
+|(Intercept)      | 0.0114809| 1.3645129| -3.273745| 0.0010613| 0.0006131|  0.1386366|
+|extra_tutoring   | 5.7669531| 0.6396975|  2.739019| 0.0061623| 1.7780366| 22.6671841|
+|attended_nursery | 0.2458926| 0.5739653| -2.444155| 0.0145192| 0.0785800|  0.7728702|
+|traveltime       | 2.7582654| 0.3325564|  3.050917| 0.0022814| 1.4294986|  5.3767426|
+
+
+---
+Result communication
+
+In terms of external and familial factors impacting whether or not a student respondent is a school/workday binge drinker, we assess that there are only three significant variables, which are whether or not the student has extra paid math classes, whether the student has attended nursery school or not, and the travel time of the student to school. 
+----
+
+A student with extra paid math classes is 4.285 times as likely to be a binge drinker than someone who does not have extra paid math classes.
+A student  who has attended nursery may be 0.252 times as likely to be a binge drinker. That is ,this student is less likely to be a binge drinker. 
+A student who has a one unit increase in travel time to school is 2.76 times as likely to be a binge drinker. That, this student is more likely to be a binge drinker
+
+----
+
+Assessing model fit
+For the large model, the area under the curve is 0.974, indicating very good fit. For the small model, the area under the curve is 0.686, which is not is great, but still better than just the estimate, which would be 0.50, or a random fit.
+---
+
+
+
+
+
+
+```r
+library(tidyverse)
+table_result%&gt;%
+  knitr::kable()
+```
+
+
+
+|Model |Metric  |Estimator |Estimate  |
+|:-----|:-------|:---------|:---------|
+|Large |roc_auc |binary    |0.9615385 |
+|Small |roc_auc |binary    |0.6089744 |
+
+
+----
+
+Methodology 
+
+Linear regression
+
+A linear regression was run to understand how student life impacts alcohol consumption and also to determine how alcohol consumption impact student's learning and performance at school. This decision was made in context of numerical nature of some of the variables.
+
+----
+
+Linear regression Model
+
+Dalc= B0 + B1(failures) + B2(goout) + B3(studytime) + B4(freetime) + B5(famrel) + B6(activities_binary) + B7(G3) + B8(romantic) + B9(health) + B10(absences)
+
+
+
+```
+## # A tibble: 12 × 5
+##    term              estimate std.error statistic   p.value
+##    &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 (Intercept)        1.01      0.351      2.88   0.00425  
+##  2 failures           0.0695    0.0636     1.09   0.275    
+##  3 goout              0.175     0.0400     4.37   0.0000158
+##  4 studytime         -0.139     0.0523    -2.65   0.00836  
+##  5 freetime           0.129     0.0453     2.85   0.00454  
+##  6 famrel            -0.106     0.0478    -2.21   0.0280   
+##  7 activities_binary -0.125     0.0851    -1.47   0.144    
+##  8 higheryes          0.00423   0.204      0.0207 0.984    
+##  9 G3                 0.00260   0.0100     0.259  0.796    
+## 10 romantic_binary   -0.00647   0.0917    -0.0706 0.944    
+## 11 health             0.0449    0.0306     1.47   0.143    
+## 12 absences           0.0106    0.00537    1.97   0.0491
+```
+
+
+
+```r
+library(tidyverse)
+Result2%&gt;%
+  knitr::kable()
+```
+
+
+
+|term              |   estimate| std.error|  statistic|   p.value|
+|:-----------------|----------:|---------:|----------:|---------:|
+|(Intercept)       |  1.0090028| 0.3507939|  2.8763405| 0.0042481|
+|failures          |  0.0694693| 0.0635728|  1.0927530| 0.2751891|
+|goout             |  0.1747797| 0.0399612|  4.3737360| 0.0000158|
+|studytime         | -0.1387512| 0.0523374| -2.6510926| 0.0083561|
+|freetime          |  0.1293881| 0.0453220|  2.8548603| 0.0045398|
+|famrel            | -0.1055355| 0.0478453| -2.2057650| 0.0279937|
+|activities_binary | -0.1247927| 0.0851361| -1.4658022| 0.1435227|
+|higheryes         |  0.0042267| 0.2042482|  0.0206940| 0.9835005|
+|G3                |  0.0026012| 0.0100452|  0.2589447| 0.7958170|
+|romantic_binary   | -0.0064690| 0.0916647| -0.0705720| 0.9437752|
+|health            |  0.0448677| 0.0305970|  1.4664054| 0.1433584|
+|absences          |  0.0106092| 0.0053738|  1.9742422| 0.0490723|
+
+---
+
+
+```
+## # A tibble: 6 × 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   1.01     0.351        2.88 0.00425  
+## 2 goout         0.175    0.0400       4.37 0.0000158
+## 3 studytime    -0.139    0.0523      -2.65 0.00836  
+## 4 freetime      0.129    0.0453       2.85 0.00454  
+## 5 famrel       -0.106    0.0478      -2.21 0.0280   
+## 6 absences      0.0106   0.00537      1.97 0.0491
+```
+
+
+```r
+library(tidyverse)
+Result3%&gt;%
+  knitr::kable()
+```
+
+
+
+|term        |   estimate| std.error| statistic|   p.value|
+|:-----------|----------:|---------:|---------:|---------:|
+|(Intercept) |  1.0090028| 0.3507939|  2.876340| 0.0042481|
+|goout       |  0.1747797| 0.0399612|  4.373736| 0.0000158|
+|studytime   | -0.1387512| 0.0523374| -2.651093| 0.0083561|
+|freetime    |  0.1293881| 0.0453220|  2.854860| 0.0045398|
+|famrel      | -0.1055355| 0.0478453| -2.205765| 0.0279937|
+|absences    |  0.0106092| 0.0053738|  1.974242| 0.0490723|
+
+
+----
+
+
+```
+## corrplot 0.90 loaded
+```
+
+![](presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+
+---
+
+```
+## [1] 0.1258835
+```
+
+```
+## Warning: Use of `model_regression_follow$.resid` is discouraged. Use `.resid`
+## instead.
+```
+
+![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-2.png)&lt;!-- --&gt;
+
+```
+## [1] -1.38079e-16
+```
+
+
+
+
+```r
+library(tidyverse)
+R_mean%&gt;%
+  knitr::kable()
+```
+
+
+
+|Adj.R.Squared |Mean_res     |
+|:-------------|:------------|
+|0.1258835     |-1.38079e-16 |
+
+
+---
+Linear Regression Result Communication
+
+In this regression output, only the estimates for goout, studytime, freetime, famrel, and absences were significant at a p-value less than 0.05. Thus, for these variables, we reject the null hypothesis that their estimates are 0, and can state that there exists a relationship between these variables and workday alcohol consumption. 
+
+Thus, we have :
+Dalc= 1.28 + 0.176(goout) + 0.146(studytime) + 0.1(famrel) + 0.13(freetime)
+----
+From our linear model output, A one unit increase in a self-reported, subjective amount of going out with friends (such as high to very high) increases the value of workday alcohol consumption by 0.176. Thus, it appears that the more frequently a student goes out with friends, the more the student drinks. 
+----
+Additionally, a one unit increase in studytime decreases alcohol consumption by 0.146, indicating that those who dedicate more time to studying or have more time for studying have lower alcohol consumption. 
+----
+Furthermore, the higher the quality of family relationships, the less alcohol consumption is. A one unit increase in the quality of family relationships decreases daily alcohol consumption by 0.1. 
+----
+The model's outputs also portray how a one unit increase in freetime also increases alcohol consumption by 0.13. Lastly, daily alcohol consumption is also significantly related to absences, where a single increase in the number can be traced to a 0.01 increase in alcohol consumption
+---
+
+Model Validation and Accuracy
+
+The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the data is explained by our linear model. The Adjusted is pretty low which suggests that our model is somehow weak. 
+
+The histogram of the residual is approximately symmetric which satisfies the condition of normality for linear regression. The mean of the residuals (-1.38079e-16) which is enough close to 0 to strengthen our linear regression model.
+---
+However, though the conditions of normality was satisfied, looking at the residual plot, the conditions of independence was not satisfied due to an identified pattern of the residuals. Residuals are linearly distributed which shows some flaws of our linear regression model.Moreover, the conditions of homoscedasticity was not satisfied because residual points are not constant. In some regions of the plot, residual points are more compacted than in other. 
+---
+Overall, we can conclude that the linear regression model we used is good at predicting student workday alcohol consumption but it is important to note that our linear model is not perfect due the lack of satisfaction of some assumption for linearity.
+---
+
+Linear Regression - Alcohol Consumption Impact on Academic Performance
+
+
+G3 = B0 + B1(Dalc)
+
+failures = B0 + B1(Dalc)
+
 
 ```
 ## # A tibble: 2 × 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2
-## 2 speed           3.93     0.416      9.46 1.49e-12
+## 1 (Intercept)   10.8       0.448     24.2  7.13e-80
+## 2 Dalc          -0.281     0.259     -1.09 2.78e- 1
 ```
+
+```
+## # A tibble: 2 × 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)    0.166    0.0721      2.30 0.0218 
+## 2 Dalc           0.114    0.0417      2.72 0.00677
+```
+
+
+
 
 ```r
-glance(model)
+library(tidyverse)
+Result4%&gt;%
+  knitr::kable()
 ```
 
-```
-## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.651         0.644  15.4      89.6 1.49e-12     1  -207.  419.  425.
-## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
 
----
 
-## Plots
+|term        |   estimate| std.error| statistic|   p.value|
+|:-----------|----------:|---------:|---------:|---------:|
+|(Intercept) | 10.8315598| 0.4475720| 24.200708| 0.0000000|
+|Dalc        | -0.2811386| 0.2590625| -1.085216| 0.2784915|
 
 
 
-&lt;img src="presentation_files/figure-html/plot-penguins-1.png" title="Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins." alt="Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins." width="70%" /&gt;
-
----
-
-## Plot and text
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
-]
-
----
-
-class: inverse, middle, center
-
-# A new section...
-
----
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; species &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; island &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; bill_length_mm &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; bill_depth_mm &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; flipper_length_mm &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; body_mass_g &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; sex &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 39.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 181 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3750 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; male &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 39.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 186 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3800 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 40.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 195 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3250 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 36.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 193 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3450 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; female &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Adelie &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Torgersen &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 39.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 190 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3650 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; male &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
----
-
-## Images
-
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="img/watercolour_sys02_img32_percolate.jpg" alt="Image credit: Danielle Navarro, Percolate." width="40%" /&gt;
-&lt;p class="caption"&gt;Image credit: Danielle Navarro, Percolate.&lt;/p&gt;
-&lt;/div&gt;
-
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(img/watercolour_sys02_img32_percolate.jpg)
-
----
-
-## Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &amp;#36;\alpha+\beta$ renders `\(\alpha+\beta\)`. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+```r
+library(tidyverse)
+Result5%&gt;%
+  knitr::kable()
 ```
 
-`$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$`
 
-Limitations:
 
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
+|term        |  estimate| std.error| statistic|   p.value|
+|:-----------|---------:|---------:|---------:|---------:|
+|(Intercept) | 0.1659621| 0.0720813|  2.302428| 0.0218329|
+|Dalc        | 0.1135811| 0.0417219|  2.722336| 0.0067708|
 
-1. There should not be spaces after the opening `$` or before the closing `$`.
+----
 
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
+Result communication
 
----
+With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures by 0.11. Although we can state that daily alcohol consumption negatively impacts one's academic performance by contributing to the number of failed classes, the impact is relatively small, as someone who increases from moderate to very high drinking would only increase their number of past class failures by 0.22.
 
-class: inverse, middle, center
 
-# Wrap up
 
----
 
-## Feeling adventurous?
 
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
 
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

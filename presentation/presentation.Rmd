@@ -1,9 +1,7 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
-author: "Team name <br> Names of team members"
-institute: "Duke University"
-date: "`r Sys.Date()`"
+title: "Student life and family circumstances that affect alcohol consumption"
+author: "Colin Lee, Danielle Mensah and Haby Sow"
+date: "19/11/2021"
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -15,187 +13,334 @@ output:
       countIncrementalSlides: false
 ---
 
-```{r load-packages, include = FALSE}
-# Add any additional packages you need to this chunk
-# Remove any packages from this list that you're not using
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(tidymodels)
-library(palmerpenguins)
-library(knitr)
-library(xaringanthemer)
 ```
 
-```{r setup, include=FALSE}
-# For better figure resolution
-knitr::opts_chunk$set(
-  fig.retina = 3, 
-  dpi = 300, 
-  fig.width = 6, 
-  fig.asp = 0.618, 
-  out.width = "70%"
-  )
-```
+## R Markdown
+iii
 
-```{r load-data, include=FALSE}
-# Load your data here
-```
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-```{r style-slides, echo = FALSE}
-style_xaringan(
-  title_slide_background_image = "img/watercolour_sys02_img34_teacup-ocean.jpg"
-)
-```
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
 
-class: inverse, middle, center
+## Slide with Bullets
 
-# Using xaringan
+- Bullet 1
+- Bullet 2
+
+
+- Bullet 3
 
 ---
 
-## xaringan
+Introduction
 
-- The presentation is created using the `xaringan` package
+This presentation outlines student life and first family circumstances that impact student alcohol consumption and the effect of alcohol consumption on student's efficacy of learning. 
 
-- Use `---` to separate slides and `--` for incremental builds
-
---
-
-- Like this
 
 ---
+Background 
 
-## Layouts
+The effects of alcohol consumption on personal health and cognition  the main area of interest for many researchers. In this research, on one hand, we will focus on other factors, such as family and the environment that impact student alcohol consumption and one the other hand,we will look at the effect of alcohol consumption on student performance in math. 
+---
+Data Sources 
+Found on Kaggle, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
+----
+Data presentation
 
-You can use plain text
+In addition to demographic and geographic information such as school name, address, sex, age, and  family size, our data contains relevant information needed to accomplish the analysis. See the table below:
 
-- or bullet points
+```{r echo = FALSE, message = FALSE}
+Variable_name<-c("Dalc","Walc","famrel","Pstatus","Medu","Fedu","romantic","Mjob",
+                 "Fjob", "guardian" ,"famsup","absences","failures","activities","goout", "G1" ,"G2" ,"G3","freetime","studytime")
+Details<-c("Weekday alcohol consumption","Weekend alcohol consumption","Quality of family relationships", "Parent’s cohabitation","Mother’s education","Father’s education","With a romantic relationship","Mother’s job","Father’s job","Student’s guardian","Family support","Number of absences","Number of past class failures","Extra-curricular activities" , "Going out with friends","First period grade","Second period grade", "Third period grade","Hours of freet time","Hours of study")
+Table_variables = data.frame(Variable_name,Details)
+```
 
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
+```{r }
+setwd("/home/guest/save-the-best-for-last")
+student <- readr::read_csv("data/student-mat.csv")
+```
 
-.footnote[
-[*] And add footnotes
-]
 
+
+
+```{r echo=TRUE}
+library(tidyverse)
+Table_variables%>%
+  knitr::kable()
+```
 ---
 
-## Code
+Methodology 
 
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
+Logistic Regression Choice
+
+A logistic regression was conducted to determine what sort of family or external factors may be drivers for student alcohol consumption. 
+This decision was made in context of categorical nature of many of the variables.These indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker.
+----
+Logistic Regression model 
+Thus, in order to set up this logistic regression, we had to begin by transforming the weekday alcoholic consumption (Dalc) value into a binary variable and other transformation of some explanatory variables as well. 
+---
+The logistic regression model is the following one:
+logit(pii) = log(pii/(1-pii)) = B0 + B1(urbani) + B2(famsmalli) + B3(parents_togetheri) + B4(mother_secondaryi) + B5(father_secondaryi) + B6(school_supporti) + B7(family_supporti) + B8(extra_tutoringi) + B9(attended_nurseryi) + B10(internet_accessi) + B11(traveltimei
+
+
+
+```{r logistic analysis, echo = FALSE, message = FALSE}
+student_binger <- student %>%
+   mutate(binger = ifelse(Dalc > 3,1,0))
+student_binger$binger=factor(student_binger$binger,levels=c(1,0),labels=c("Yes","No"))
+student_binger$binger=relevel(student_binger$binger, ref = "No")
+student_logit <- student_binger %>%
+  mutate(urban = ifelse(address == "U", 1, 0)) %>%
+  mutate(famsmall = ifelse(famsize == "LE3", 1, 0)) %>%
+  mutate(parents_together = ifelse(Pstatus == "T", 1, 0)) %>%
+  mutate(mother_secondary = ifelse(Medu >= 3, 1, 0)) %>%
+  mutate(father_secondary = ifelse(Fedu >= 3, 1, 0)) %>%
+  mutate(school_support = ifelse(schoolsup == "yes", 1, 0)) %>%
+  mutate(family_support = ifelse(famsup == "yes", 1, 0)) %>%
+  mutate(extra_tutoring = ifelse(paid == "yes", 1, 0)) %>%
+  mutate(attended_nursery = ifelse(nursery == "yes", 1, 0)) %>%
+  mutate(internetaccess = ifelse(internet == "yes", 1, 0))
+student_logit_fit <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(binger ~ urban + famsmall + parents_together + mother_secondary + father_secondary + school_support + family_support + extra_tutoring + attended_nursery + internetaccess + traveltime, data = student_logit, family = "binomial")
+tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE)
+```
+
+```{r logistic regression significant results, echo = FALSE}
+Result<-tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
+  print()
+  
+```
+
+
+```{r echo=TRUE}
+library(tidyverse)
+Result%>%
+  knitr::kable()
+```
+
+```{r}
+Result<-tidy(student_logit_fit, conf.int=TRUE, exponentiate = TRUE) %>%
+  filter(p.value < 0.05) %>%
+  print()
+```
+```{r echo=TRUE}
+library(tidyverse)
+Result%>%
+  knitr::kable()
+```
+
+
+---
+Result communication
+
+In terms of external and familial factors impacting whether or not a student respondent is a school/workday binge drinker, we assess that there are only three significant variables, which are whether or not the student has extra paid math classes, whether the student has attended nursery school or not, and the travel time of the student to school. 
+----
+
+A student with extra paid math classes is 4.285 times as likely to be a binge drinker than someone who does not have extra paid math classes.
+A student  who has attended nursery may be 0.252 times as likely to be a binge drinker. That is ,this student is less likely to be a binge drinker. 
+A student who has a one unit increase in travel time to school is 2.76 times as likely to be a binge drinker. That, this student is more likely to be a binge drinker
+
+----
+
+Assessing model fit
+For the large model, the area under the curve is 0.974, indicating very good fit. For the small model, the area under the curve is 0.686, which is not is great, but still better than just the estimate, which would be 0.50, or a random fit.
+---
+
+```{r}
+Model<-c("Large","Small")
+Metric<-c("roc_auc","roc_auc")
+Estimator<-c("binary","binary")
+Estimate<-c("0.9615385","0.6089744")
+table_result<-data.frame( Model , Metric ,  Estimator, Estimate)
+```
+
+
+
+```{r echo=TRUE}
+library(tidyverse)
+table_result%>%
+  knitr::kable()
+```
+
+
+----
+
+Methodology 
+
+Linear regression
+
+A linear regression was run to understand how student life impacts alcohol consumption and also to determine how alcohol consumption impact student's learning and performance at school. This decision was made in context of numerical nature of some of the variables.
+
+----
+
+Linear regression Model
+
+Dalc= B0 + B1(failures) + B2(goout) + B3(studytime) + B4(freetime) + B5(famrel) + B6(activities_binary) + B7(G3) + B8(romantic) + B9(health) + B10(absences)
+
+
+```{r linear regression, echo = FALSE, message = FALSE}
+student$activities_binary <- ifelse(student$activities == "yes", 1, 0)
+student$romantic_binary <- ifelse(student$romantic == "yes", 1, 0)
+model_regression<-linear_reg()%>%
+set_engine("lm")%>%
+  fit(Dalc ~ failures + goout + studytime + freetime + famrel+ activities_binary + higher + G3 + romantic_binary + health + absences, data=student)
+print(tidy(model_regression))
+Result2<-tidy(model_regression)
+```
+
+
+```{r echo=TRUE}
+library(tidyverse)
+Result2%>%
+  knitr::kable()
 ```
 
 ---
 
-## Plots
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
+```{r}
+Result3<-Result2%>%
+filter(p.value < 0.05) %>%
+  print()
 ```
 
-```{r plot-penguins, echo = FALSE, warning = FALSE, fig.alt = "Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all the others combined together. There is a relatively strong, positive relationship between the two variables. The Adelie penguins are clustered together but they don't exhibit a different trend than the rest of the penguins."}
-# Code hidden with echo = FALSE
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(penguins_modified, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
-  geom_point() + 
-  theme_minimal()
+```{r echo=TRUE}
+library(tidyverse)
+Result3%>%
+  knitr::kable()
 ```
 
----
 
-## Plot and text
+----
 
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
-
----
-
-class: inverse, middle, center
-
-# A new section...
-
----
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r penguins-table, echo = FALSE}
-kable(head(penguins), format = "html")
+```{r}
+library(patchwork)
+library(tidyverse)
+library(corrplot)
+new_student<-student%>%
+  select(c("Dalc","failures" , "goout", "studytime" , "freetime" ,"famrel", "activities_binary", "G3", "romantic_binary", "health", "absences"))
+dalc_correlation<-cor(new_student)
+#corrplot(dalc_correlation,method="ellipse", type = 'upper')
+#space saving for now, can bring back in later if space is available
+corrplot(dalc_correlation, method="number" , type="upper")
 ```
 
+
 ---
-
-## Images
-
-```{r castle, echo = FALSE, out.width = "40%", fig.align = "center", fig.cap = "Image credit: Danielle Navarro, Percolate."}
-include_graphics("img/watercolour_sys02_img32_percolate.jpg")
+```{r R adjusted, histogram of residuals and rmse,echo = FALSE, message = FALSE}
+glance(model_regression)$adj.r.squared
+model_regression_follow<-augment(model_regression$fit)
+ggplot(data=model_regression_follow, aes(x = model_regression_follow$.resid)) +
+    geom_histogram(fill = 'steelblue', color = 'black') +
+    labs(title = 'Histogram of Residuals', x = 'Residuals', y = 'Frequency')
+ggplot(model_regression_follow, mapping=aes (x=.fitted, y=.resid)) + geom_point(alpha=0.5)
+mean_res<-mean(model_regression_follow$.resid)
+mean_res
 ```
 
-Or you can also include a full page image. See next slide.
-
----
-
-background-image: url(img/watercolour_sys02_img32_percolate.jpg)
-
----
-
-## Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+```{r}
+Adj.R.Squared<-c("0.1258835")
+Mean_res<-c("-1.38079e-16")
+R_mean<-data.frame(Adj.R.Squared, Mean_res)
 ```
 
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
+```{r echo=TRUE}
+library(tidyverse)
+R_mean%>%
+  knitr::kable()
+```
 
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
 
 ---
+Linear Regression Result Communication
 
-class: inverse, middle, center
+In this regression output, only the estimates for goout, studytime, freetime, famrel, and absences were significant at a p-value less than 0.05. Thus, for these variables, we reject the null hypothesis that their estimates are 0, and can state that there exists a relationship between these variables and workday alcohol consumption. 
 
-# Wrap up
-
+Thus, we have :
+Dalc= 1.28 + 0.176(goout) + 0.146(studytime) + 0.1(famrel) + 0.13(freetime)
+----
+From our linear model output, A one unit increase in a self-reported, subjective amount of going out with friends (such as high to very high) increases the value of workday alcohol consumption by 0.176. Thus, it appears that the more frequently a student goes out with friends, the more the student drinks. 
+----
+Additionally, a one unit increase in studytime decreases alcohol consumption by 0.146, indicating that those who dedicate more time to studying or have more time for studying have lower alcohol consumption. 
+----
+Furthermore, the higher the quality of family relationships, the less alcohol consumption is. A one unit increase in the quality of family relationships decreases daily alcohol consumption by 0.1. 
+----
+The model's outputs also portray how a one unit increase in freetime also increases alcohol consumption by 0.13. Lastly, daily alcohol consumption is also significantly related to absences, where a single increase in the number can be traced to a 0.01 increase in alcohol consumption
 ---
 
-## Feeling adventurous?
+Model Validation and Accuracy
 
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
+The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the data is explained by our linear model. The Adjusted is pretty low which suggests that our model is somehow weak. 
 
-- You are welcomed to use the default styling of the slides. In fact, that's what I expect the majority of you will do. You will differentiate yourself with the content of your presentation.
+The histogram of the residual is approximately symmetric which satisfies the condition of normality for linear regression. The mean of the residuals (-1.38079e-16) which is enough close to 0 to strengthen our linear regression model.
+---
+However, though the conditions of normality was satisfied, looking at the residual plot, the conditions of independence was not satisfied due to an identified pattern of the residuals. Residuals are linearly distributed which shows some flaws of our linear regression model.Moreover, the conditions of homoscedasticity was not satisfied because residual points are not constant. In some regions of the plot, residual points are more compacted than in other. 
+---
+Overall, we can conclude that the linear regression model we used is good at predicting student workday alcohol consumption but it is important to note that our linear model is not perfect due the lack of satisfaction of some assumption for linearity.
+---
 
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
+Linear Regression - Alcohol Consumption Impact on Academic Performance
 
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+
+G3 = B0 + B1(Dalc)
+
+failures = B0 + B1(Dalc)
+
+```{r alcohol consumption and final grade, echo = FALSE, message = FALSE}
+model_dalc_final_grade<-linear_reg()%>%
+  set_engine("lm")%>%
+  fit(G3~Dalc, data=student)
+print(tidy(model_dalc_final_grade))
+model_dalc_failures<-linear_reg()%>%
+  set_engine("lm")%>%
+  fit(failures~Dalc, data=student)
+print(tidy(model_dalc_failures))
+Result4<-tidy(model_dalc_final_grade)
+Result5<-tidy(model_dalc_failures)
+```
+
+
+
+```{r echo=TRUE}
+library(tidyverse)
+Result4%>%
+  knitr::kable()
+```
+
+
+```{r echo=TRUE}
+library(tidyverse)
+Result5%>%
+  knitr::kable()
+```
+
+----
+
+Result communication
+
+With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures by 0.11. Although we can state that daily alcohol consumption negatively impacts one's academic performance by contributing to the number of failed classes, the impact is relatively small, as someone who increases from moderate to very high drinking would only increase their number of past class failures by 0.22.
+
+
+
+
+
+
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
