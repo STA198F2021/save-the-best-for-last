@@ -41,7 +41,8 @@ library(corrplot)
 
 #working directory is different based on user, just comment out the below line if you renamed the project
 # to anything else that's not save-the-best-for-last
-setwd('/home/guest/save-the-best-for-last')
+#setwd('/home/guest/save-the-best-for-last')
+setwd("/home/guest/R/save-the-best-for-last-one")
 
 student <- readr::read_csv("data/student-mat.csv")
 
@@ -208,8 +209,36 @@ It is extremely important to proceed with caution in interpreting the analysis o
 Thus, our multiple linear regression model takes the following form:
 Dalc= 1.28 + 0.176(goout) + 0.146(studytime) + 0.1(famrel) + 0.13(freetime)
 
-# R^2 analysis, RMSE, interactions, and/or graphical representations need to be done here
-I recommend at least R^2, residual graph, and RMSE here
+```{r R adjusted, histogram of residuals and rmse,echo = FALSE, message = FALSE}
+glance(model_regression)$adj.r.squared
+
+model_regression_follow<-augment(model_regression$fit)
+
+ggplot(data=model_regression_follow, aes(x = model_regression_follow$.resid)) +
+    geom_histogram(fill = 'steelblue', color = 'black') +
+    labs(title = 'Histogram of Residuals', x = 'Residuals', y = 'Frequency')
+
+
+ggplot(model_regression_follow, mapping=aes (x=.fitted, y=.resid)) + geom_point(alpha=0.5)
+
+RMSE<-sqrt(mean((model_regression_follow$Dalc - model_regression_follow$.fitted)^2))
+RMSE
+
+mean_res<-mean(model_regression_follow$.resid)
+mean_res
+
+```
+
+
+The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the data is explained by our linear model. 
+
+The RMSE (Root Mean Square Error) is estimated to 0.82. This is relatively low which means that our model is a good fit and hence, the variables goout, studytime, famrel and freetime are good predictors of student workday alcohol consumption. 
+
+The histogram of the residual is approximately symmetric which satisfies the condition of normality for linear regression. The mean of the residuals (-1.38079e-16) which is enough close to 0 to strengthen our linear regression model.
+
+However, though the conditions of normality was satisfied, looking at the residual plot, the conditions of independence was not satisfied due to an identified pattern of the residuals. Residuals are linearly distributed which shows some flaws of our linear regression model.Moreover, the conditions of homoscedasticity was not satisfied because residual points are not constant. In some regions of the plot, residual points are more compacted than in other. 
+Overall, we can conclude that the linear regression model we used is good at predicting student workday alcohol consumption but it is important to note that our linear model is perfect due the lack of satisfaction of some assumption for linearity.
+
 
 
 # Linear Regression - Alcohol Consumption Impact on Academic Performance:
