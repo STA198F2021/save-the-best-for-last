@@ -35,7 +35,6 @@ student <- readr::read_csv("data/student-mat.csv")
 #Introduction
 
 
-
 - Our data set is from the UC Irvine Machine Learning school and is about student alcohol consumption in math classes in Portugal. Our group has decided to focus on the family circumstances that affect student alcohol consumption and the effect student alcohol consumption has on a student's learning efficacy.  
 
 
@@ -375,9 +374,12 @@ Result5%>%
 
 - With our logistic regression, we were able to determine that attended nursery school and had addition paid classes were significant in whether they were Workday alcohol drinkers. 
 
+
 - Through linear regression, we were able to determine a few factors that led to an increase in workday alcohol consumption. These were: freetime, going out with friends, and the number of school absences 
 
+
 - On the other hand, we saw that an increase in quality family relationships and more time studying decreases the chances of being a workday alchol drinker
+
 
 - Although we found that workday alcohol consumption does not play a signifcant factor on grades, it does have an impact on past failures.  
 
