@@ -166,48 +166,9 @@ Result %>%
   kable(format = "html")
 ```
 --
-$$π_i=\frac{π_i}{1-π_i} = 0.044 + 0.197(AttendedNursery_i) + 2.758(TravelTime_i)$$
+$$π_i=\frac{π_i}{1-π_i} = 0.044 + 5.767(ExtraTutoring_i) + 0.197(AttendedNursery_i) + 2.758(TravelTime_i)$$
 --
----
 
-.pull-left[
-Large Model
-]
-.pull-right[
-Significant Model
-]
-```{r r overfitting setup, echo = FALSE, message = FALSE, results = 'hide'}
-set.seed(0)
-
-student_logit_fit1 <- logistic_reg() %>%
-  set_engine("glm") %>%
-  fit(binger ~ extra_tutoring + attended_nursery + traveltime, data = student_logit, family = "binomial")
-  
-
-# Put 80% of the data into the training set 
-student_split <- initial_split(student_logit, prop = 0.80)
-# Create data frames for the two sets:
-train_data <- training(student_split)
-test_data  <- testing(student_split)
-
-binger_pred <- predict(student_logit_fit, test_data, type = "prob") %>%
-  bind_cols(test_data %>% select(binger))
-
-binger_pred1 <- predict(student_logit_fit1, test_data, type = "prob") %>%
-  bind_cols(test_data %>% select(binger))
-```
-
-```{r logit fit plots, echo = FALSE}
-binger_pred %>%
-  roc_curve(truth = binger, .pred_Yes, event_level = "second") %>%
-  autoplot()
-
-binger_pred1 %>%
-  roc_curve(truth = binger, .pred_Yes, event_level = "second") %>%
-  autoplot()
-```
-
----
 
 #Linear regression Model
 
