@@ -260,7 +260,7 @@ Result3%>%
 
 - Used to predict which variables would be significant or not and to describe how variables may depend on one another.
 
-```{r}
+```{r corrplot, echo = FALSE, message = FALSE, results = 'hide', warning = FALSE}
 library(patchwork)
 library(tidyverse)
 library(corrplot)
@@ -274,7 +274,7 @@ corrplot(dalc_correlation, method="number" , type="upper")
 ---
 # Visualizations
 
-```{r R adjusted, histogram of residuals and rmse,echo = FALSE, message = FALSE}
+```{r R adjusted, histogram of residuals and rmse,echo = FALSE, message = FALSE, results = 'hide', warning = FALSE}
 glance(model_regression)$adj.r.squared
 model_regression_follow<-augment(model_regression$fit)
 ggplot(data=model_regression_follow, aes(x = model_regression_follow$.resid)) +
