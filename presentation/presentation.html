@@ -48,7 +48,7 @@ Background
 The effects of alcohol consumption on personal health and cognition  the main area of interest for many researchers. In this research, on one hand, we will focus on other factors, such as family and the environment that impact student alcohol consumption and one the other hand,we will look at the effect of alcohol consumption on student performance in math. 
 ---
 Data Sources 
-Found on Kaggle, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
+Found on __Kaggle__, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
 ----
 Data presentation
 
@@ -62,10 +62,10 @@ In addition to demographic and geographic information such as school name, addre
 ```
 
 ```
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────────────────
 ## Delimiter: ","
-## chr (17): school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardi...
-## dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
+## chr (17): school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardian, schoolsup, fams...
+## dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime, goout, Dalc, Walc...
 ```
 
 ```
@@ -345,11 +345,6 @@ Result3%&gt;%
 
 ----
 
-
-```
-## corrplot 0.90 loaded
-```
-
 ![](presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 
@@ -360,8 +355,7 @@ Result3%&gt;%
 ```
 
 ```
-## Warning: Use of `model_regression_follow$.resid` is discouraged. Use `.resid`
-## instead.
+## Warning: Use of `model_regression_follow$.resid` is discouraged. Use `.resid` instead.
 ```
 
 ![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-2.png)&lt;!-- --&gt;
