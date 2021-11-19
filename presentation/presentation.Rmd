@@ -26,8 +26,8 @@ library(xaringanthemer)
 ```
 
 ```{r, include = FALSE}
-#setwd("/home/guest/save-the-best-for-last")
-setwd("/home/guest/R/project-01-")
+setwd("/home/guest/save-the-best-for-last")
+#setwd("/home/guest/R/project-01-")
 student <- readr::read_csv("data/student-mat.csv")
 ```
 
@@ -39,7 +39,7 @@ student <- readr::read_csv("data/student-mat.csv")
 
 
 ---
-#Plots 
+#Data Description
 
 .pull-left[
 
@@ -61,7 +61,7 @@ student %>%
 
 
 ---
-# More Plots!
+#Who Our Data Covers
 
 .pull-left[
 
@@ -77,8 +77,8 @@ student %>%
 
 .pull-right[
 ```{r}
- ggplot(student, aes(x = Walc, 
-                  fill = sex)) +
+ ggplot(student, aes(x = Dalc, 
+                  fill = school)) +
   geom_bar()
 
 ```
