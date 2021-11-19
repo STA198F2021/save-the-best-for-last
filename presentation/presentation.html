@@ -20,6 +20,8 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
 #Introduction
 
 
@@ -28,40 +30,43 @@ class: center, middle, inverse, title-slide
 
 
 ---
-&gt;&gt;&gt;&gt;&gt;&gt;&gt; 3ab05de56e9325e4ee3328d110683f9bc5e1c7a8
-Data presentation
+#Plots 
 
-In addition to demographic and geographic information such as school name, address, sex, age, and  family size, our data contains relevant information needed to accomplish the analysis. See the table below:
+.pull-left[
 
-
-
-
-```
-## Rows: 395 Columns: 33
-```
-
-```
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: ","
-## chr (17): school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardi...
-## dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
-```
-
-```
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-```
+![](presentation_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
 
 
+.pull-right[
+![](presentation_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+
+---
+# More Plots!
+
+.pull-left[
+
+![](presentation_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+]
+
+
+.pull-right[
+![](presentation_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+
+---
+#Data presentation
+
+- Very large data set originally
+- Used only important variables
+- Variety in the types of data used
 
 
 
-```r
-library(tidyverse)
-Table_variables%&gt;%
-  knitr::kable()
-```
+
 
 
 
@@ -303,9 +308,9 @@ Significant Model
 
 ---
 
-Linear regression Model
+#Linear regression Model
 
-Dalc= B0 + B1(failures) + B2(goout) + B3(studytime) + B4(freetime) + B5(famrel) + B6(activities_binary) + B7(G3) + B8(romantic) + B9(health) + B10(absences)
+- A multiple linear regression was run to understand how student life impacts alcohol consumption
 
 `$$Dalc = \beta_0 + \beta_1(failures_i) + \beta_2(goout_i) + \beta_3(studytime_i)+ \beta_4(freetime_i)$$` 
 `$$+ \beta_5(famrel_i) \beta_6(ActivitiesBinary_i) + \beta_7(G3_i) + \beta_8(romantic_i)$$`
@@ -333,30 +338,13 @@ Dalc= B0 + B1(failures) + B2(goout) + B3(studytime) + B4(freetime) + B5(famrel) 
 
 
 
-```r
-library(tidyverse)
-Result2%&gt;%
-  knitr::kable()
-```
-
-
-
-|term              |   estimate| std.error|  statistic|   p.value|
-|:-----------------|----------:|---------:|----------:|---------:|
-|(Intercept)       |  1.0090028| 0.3507939|  2.8763405| 0.0042481|
-|failures          |  0.0694693| 0.0635728|  1.0927530| 0.2751891|
-|goout             |  0.1747797| 0.0399612|  4.3737360| 0.0000158|
-|studytime         | -0.1387512| 0.0523374| -2.6510926| 0.0083561|
-|freetime          |  0.1293881| 0.0453220|  2.8548603| 0.0045398|
-|famrel            | -0.1055355| 0.0478453| -2.2057650| 0.0279937|
-|activities_binary | -0.1247927| 0.0851361| -1.4658022| 0.1435227|
-|higheryes         |  0.0042267| 0.2042482|  0.0206940| 0.9835005|
-|G3                |  0.0026012| 0.0100452|  0.2589447| 0.7958170|
-|romantic_binary   | -0.0064690| 0.0916647| -0.0705720| 0.9437752|
-|health            |  0.0448677| 0.0305970|  1.4664054| 0.1433584|
-|absences          |  0.0106092| 0.0053738|  1.9742422| 0.0490723|
 
 ---
+#Linear Regression P-Value
+
+- We constructed a test to determine which values were significant toward a student's alcohol consumption
+- Through the test, we determined goout, studytime, freetime, famrel, and absences were only the significant variables that show proof of a relationship between them and alcohol consumption
+
 
 
 ```
@@ -372,35 +360,24 @@ Result2%&gt;%
 ```
 
 
-```r
-library(tidyverse)
-Result3%&gt;%
-  knitr::kable()
-```
-
-
-
-|term        |   estimate| std.error| statistic|   p.value|
-|:-----------|----------:|---------:|---------:|---------:|
-|(Intercept) |  1.0090028| 0.3507939|  2.876340| 0.0042481|
-|goout       |  0.1747797| 0.0399612|  4.373736| 0.0000158|
-|studytime   | -0.1387512| 0.0523374| -2.651093| 0.0083561|
-|freetime    |  0.1293881| 0.0453220|  2.854860| 0.0045398|
-|famrel      | -0.1055355| 0.0478453| -2.205765| 0.0279937|
-|absences    |  0.0106092| 0.0053738|  1.974242| 0.0490723|
 
 
 ---
+# Correlation Matrix
+
+- Used to predict which variables would be significant or not and to describe how variables may depend on one another.
 
 
 ```
 ## corrplot 0.90 loaded
 ```
 
-![](presentation_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 
 ---
+# Visualizations
+
 
 ```
 ## [1] 0.1258835
@@ -434,35 +411,37 @@ R_mean%&gt;%
 
 
 ---
-Linear Regression Result Communication
+#Linear Regression Result 
 
 In this regression output, only the estimates for goout, studytime, freetime, famrel, and absences were significant at a p-value less than 0.05. Thus, for these variables, we reject the null hypothesis that their estimates are 0, and can state that there exists a relationship between these variables and workday alcohol consumption. 
 
 Thus, we have :
 `$$Dalc= 1.28 + 0.176(goout_i) + 0.146(studytime_i) + 0.1(famrel_i) + 0.13(freetime_i)$$`
 ---
-From our linear model output, A one unit increase in a self-reported, subjective amount of going out with friends (such as high to very high) increases the value of workday alcohol consumption by 0.176. Thus, it appears that the more frequently a student goes out with friends, the more the student drinks. 
+#Linear Regression Result -Part 2
+
+- From our linear model output, A one unit increase in a self-reported, subjective amount of going out with friends (such as high to very high) increases the value of workday alcohol consumption by 0.176. Thus, it appears that the more frequently a student goes out with friends, the more the student drinks. 
+
+- Additionally, a one unit increase in studytime decreases alcohol consumption by 0.146, indicating that those who dedicate more time to studying or have more time for studying have lower alcohol consumption.
+
+- Furthermore, the higher the quality of family relationships, the less alcohol consumption is. A one unit increase in the quality of family relationships decreases daily alcohol consumption by 0.1.
+
+- The model's outputs also portray how a one unit increase in freetime also increases alcohol consumption by 0.13. Lastly, daily alcohol consumption is also significantly related to absences, where a single increase in the number can be traced to a 0.01 increase in alcohol consumption
 ---
-Additionally, a one unit increase in studytime decreases alcohol consumption by 0.146, indicating that those who dedicate more time to studying or have more time for studying have lower alcohol consumption. 
----
-Furthermore, the higher the quality of family relationships, the less alcohol consumption is. A one unit increase in the quality of family relationships decreases daily alcohol consumption by 0.1. 
----
-The model's outputs also portray how a one unit increase in freetime also increases alcohol consumption by 0.13. Lastly, daily alcohol consumption is also significantly related to absences, where a single increase in the number can be traced to a 0.01 increase in alcohol consumption
+#Model Validation and Accuracy
+
+- The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the data is explained by our linear model. The Adjusted is pretty low which suggests that our model is somehow weak. 
+
+- The histogram of the residual is approximately symmetric which satisfies the condition of normality for linear regression. The mean of the residuals (-1.38079e-16) which is enough close to 0 to strengthen our linear regression model.
+
+- However, though the conditions of normality was satisfied, looking at the residual plot, the conditions of independence was not satisfied due to an identified pattern of the residuals. Residuals are linearly distributed which shows some flaws of our linear regression model.Moreover, the conditions of homoscedasticity was not satisfied because residual points are not constant. In some regions of the plot, residual points are more compacted than in other. 
+
+- Overall, we can conclude that the linear regression model we used is good at predicting student workday alcohol consumption but it is important to note that our linear model is not perfect due the lack of satisfaction of some assumption for linearity.
 ---
 
-Model Validation and Accuracy
+#Linear Regression - Alcohol Consumption's Impact on Academic Performance
 
-The R adjusted squared here is approximately 0.13, which implies that 13% of the variation in the data is explained by our linear model. The Adjusted is pretty low which suggests that our model is somehow weak. 
-
-The histogram of the residual is approximately symmetric which satisfies the condition of normality for linear regression. The mean of the residuals (-1.38079e-16) which is enough close to 0 to strengthen our linear regression model.
----
-However, though the conditions of normality was satisfied, looking at the residual plot, the conditions of independence was not satisfied due to an identified pattern of the residuals. Residuals are linearly distributed which shows some flaws of our linear regression model.Moreover, the conditions of homoscedasticity was not satisfied because residual points are not constant. In some regions of the plot, residual points are more compacted than in other. 
----
-Overall, we can conclude that the linear regression model we used is good at predicting student workday alcohol consumption but it is important to note that our linear model is not perfect due the lack of satisfaction of some assumption for linearity.
----
-
-Linear Regression - Alcohol Consumption Impact on Academic Performance
-
+- We used another linear regression model to determine whether alcohol use has an effect on a student's performance in school. 
 
 `$$G3 = \beta_0 + \beta_1(Dalc)$$`
 
@@ -488,58 +467,32 @@ Linear Regression - Alcohol Consumption Impact on Academic Performance
 
 
 
-```r
-library(tidyverse)
-Result4%&gt;%
-  knitr::kable()
-```
 
 
 
-|term        |   estimate| std.error| statistic|   p.value|
-|:-----------|----------:|---------:|---------:|---------:|
-|(Intercept) | 10.8315598| 0.4475720| 24.200708| 0.0000000|
-|Dalc        | -0.2811386| 0.2590625| -1.085216| 0.2784915|
-
-
-
-```r
-library(tidyverse)
-Result5%&gt;%
-  knitr::kable()
-```
-
-
-
-|term        |  estimate| std.error| statistic|   p.value|
-|:-----------|---------:|---------:|---------:|---------:|
-|(Intercept) | 0.1659621| 0.0720813|  2.302428| 0.0218329|
-|Dalc        | 0.1135811| 0.0417219|  2.722336| 0.0067708|
 
 ---
+# Linear Regression Result
 
-Result communication
+- With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures by 0.11. 
 
-With this regression model, the result shows us that a one unit increase in daily alcohol consumption increases the number past failures by 0.11. Although we can state that daily alcohol consumption negatively impacts one's academic performance by contributing to the number of failed classes, the impact is relatively small, as someone who increases from moderate to very high drinking would only increase their number of past class failures by 0.22.
+- Although we can state that daily alcohol consumption negatively impacts one's academic performance by contributing to the number of failed classes, the impact is relatively small, as someone who increases from moderate to very high drinking would only increase their number of past class failures by 0.22.
+
+---
+# Conclusion
+
+- With our logistic regression, we were able to determine that attended nursery school and had addition paid classes were significant in whether they were Workday alcohol drinkers. 
+
+- Through linear regression, we were able to determine a few factors that led to an increase in workday alcohol consumption. These were: freetime, going out with friends, and the number of school absences 
+
+- On the other hand, we saw that an increase in quality family relationships and more time studying decreases the chances of being a workday alchol drinker
+
+- Although we found that workday alcohol consumption does not play a signifcant factor on grades, it does have an impact on past failures.  
 
 
 
 
 
-
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
