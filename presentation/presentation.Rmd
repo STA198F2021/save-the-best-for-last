@@ -26,8 +26,8 @@ library(xaringanthemer)
 ```
 
 ```{r, include = FALSE}
-setwd("/home/guest/save-the-best-for-last")
-#setwd("/home/guest/R/project-01-")
+#setwd("/home/guest/save-the-best-for-last")
+setwd("/home/guest/R/project-01-")
 student <- readr::read_csv("data/student-mat.csv")
 ```
 
@@ -385,5 +385,13 @@ Result5%>%
 
 
 
+---
+# Citations 
 
+P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
+
+“Underage Drinking.” National Institute on Alcohol Abuse and Alcoholism, U.S. Department of Health and Human Services, https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/underage-drinking. 
+
+
+---
 
