@@ -1,5 +1,5 @@
 ---
-title: "Student life and family circumstances that affect alcohol consumption"
+title: "Impacts of Family Factors and Student Life on Alcohol Consumption"
 author: "Colin Lee, Danielle Mensah and Haby Sow"
 date: "19/11/2021"
 output:
@@ -27,29 +27,6 @@ library(xaringanthemer)
 
 
 - Our data set is from the UC Irvine Machine Learning school and is about student alcohol consumption in math classes in Portugal. Our group has decided to focus on the family circumstances that affect student alcohol consumption and the effect student alcohol consumption has on a student's learning efficacy.  
-
-
----
-#Plots
-
-.pull-left[
-
-```{r}
-student %>%
-  ggplot(aes(x = Dalc)) +
-  geom_histogram(binwidth = 0.5)
-```
-]
-
-
-.pull-right[
-```{r}
-student %>%
-  ggplot(aes(x = Walc)) +
-  geom_histogram(binwidth = 0.5)
-```
-]
-
 
 
 ---
@@ -88,14 +65,14 @@ A logistic regression was conducted to determine what sort of family or external
 This decision was made in context of categorical nature of many of the variables. These indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker.
 --
 .pull_left[$$log(π_i)=log(\frac{π_i}{1-π_i}) = \beta_0 + \beta_1(Urban_i) + \beta_2(FamSmall_i) + \beta_3(ParentsTogether_i)+ \beta_4(MotherSecondary_i)$$ 
-$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i) $$
-$$+ \beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$]
+$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$
+$$+\beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$]
 --
 
 ---
 
 .pull_left[$$log(π_i)=log(\frac{π_i}{1-π_i}) = \beta_0 + \beta_1(Urban_i) + \beta_2(FamSmall_i) + \beta_3(ParentsTogether_i)+ \beta_4(MotherSecondary_i)$$ 
-$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i) $$
+$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$
 $$+ \beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$]
 --
 ```{r logistic analysis, echo = FALSE, message = FALSE, results = 'hide'}
@@ -185,6 +162,10 @@ Linear regression Model
 
 Dalc= B0 + B1(failures) + B2(goout) + B3(studytime) + B4(freetime) + B5(famrel) + B6(activities_binary) + B7(G3) + B8(romantic) + B9(health) + B10(absences)
 
+$$Dalc = \beta_0 + \beta_1(failures_i) + \beta_2(goout_i) + \beta_3(studytime_i)+ \beta_4(freetime_i)$$ 
+$$+ \beta_5(famrel_i) \beta_6(ActivitiesBinary_i) + \beta_7(G3_i) + \beta_8(romantic_i)$$
+$$+ \beta_9(health_i) + \beta_10(absences_i)$$
+
 
 ```{r linear regression, echo = FALSE, message = FALSE}
 student$activities_binary <- ifelse(student$activities == "yes", 1, 0)
@@ -264,7 +245,7 @@ Linear Regression Result Communication
 In this regression output, only the estimates for goout, studytime, freetime, famrel, and absences were significant at a p-value less than 0.05. Thus, for these variables, we reject the null hypothesis that their estimates are 0, and can state that there exists a relationship between these variables and workday alcohol consumption. 
 
 Thus, we have :
-Dalc= 1.28 + 0.176(goout) + 0.146(studytime) + 0.1(famrel) + 0.13(freetime)
+$$Dalc= 1.28 + 0.176(goout_i) + 0.146(studytime_i) + 0.1(famrel_i) + 0.13(freetime_i)$$
 ---
 From our linear model output, A one unit increase in a self-reported, subjective amount of going out with friends (such as high to very high) increases the value of workday alcohol consumption by 0.176. Thus, it appears that the more frequently a student goes out with friends, the more the student drinks. 
 ---
@@ -289,9 +270,9 @@ Overall, we can conclude that the linear regression model we used is good at pre
 Linear Regression - Alcohol Consumption Impact on Academic Performance
 
 
-G3 = B0 + B1(Dalc)
+$$G3 = \beta_0 + \beta_1(Dalc)$$
 
-failures = B0 + B1(Dalc)
+$$failures = \beta_0 + \beta_1(Dalc)$$
 
 ```{r alcohol consumption and final grade, echo = FALSE, message = FALSE}
 model_dalc_final_grade<-linear_reg()%>%

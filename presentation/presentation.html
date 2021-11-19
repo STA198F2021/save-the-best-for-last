@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Student life and family circumstances that affect alcohol consumption</title>
+    <title>Impacts of Family Factors and Student Life on Alcohol Consumption</title>
     <meta charset="utf-8" />
     <meta name="author" content="Colin Lee, Danielle Mensah and Haby Sow" />
     <script src="libs/header-attrs-2.11/header-attrs.js"></script>
@@ -11,7 +11,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Student life and family circumstances that affect alcohol consumption
+# Impacts of Family Factors and Student Life on Alcohol Consumption
 ### Colin Lee, Danielle Mensah and Haby Sow
 ### 19/11/2021
 
@@ -28,21 +28,6 @@ class: center, middle, inverse, title-slide
 
 
 ---
-#Plots
-
-.pull-left[
-
-![](presentation_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
-]
-
-
-.pull-right[
-![](presentation_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
-]
-
-
-
----
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 3ab05de56e9325e4ee3328d110683f9bc5e1c7a8
 Data presentation
 
@@ -56,10 +41,10 @@ In addition to demographic and geographic information such as school name, addre
 ```
 
 ```
-## ── Column specification ───────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: ","
-## chr (17): school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardian, schoolsup, fams...
-## dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime, goout, Dalc, Walc...
+## chr (17): school, sex, address, famsize, Pstatus, Mjob, Fjob, reason, guardi...
+## dbl (16): age, Medu, Fedu, traveltime, studytime, failures, famrel, freetime...
 ```
 
 ```
@@ -111,14 +96,14 @@ A logistic regression was conducted to determine what sort of family or external
 This decision was made in context of categorical nature of many of the variables. These indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker.
 --
 .pull_left[$$log(π_i)=log(\frac{π_i}{1-π_i}) = \beta_0 + \beta_1(Urban_i) + \beta_2(FamSmall_i) + \beta_3(ParentsTogether_i)+ \beta_4(MotherSecondary_i)$$ 
-$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i) $$
-`$$+ \beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$`]
+`$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$`
+`$$+\beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$`]
 --
 
 ---
 
 .pull_left[$$log(π_i)=log(\frac{π_i}{1-π_i}) = \beta_0 + \beta_1(Urban_i) + \beta_2(FamSmall_i) + \beta_3(ParentsTogether_i)+ \beta_4(MotherSecondary_i)$$ 
-$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i) $$
+`$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$`
 `$$+ \beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$`]
 --
 
@@ -322,6 +307,10 @@ Linear regression Model
 
 Dalc= B0 + B1(failures) + B2(goout) + B3(studytime) + B4(freetime) + B5(famrel) + B6(activities_binary) + B7(G3) + B8(romantic) + B9(health) + B10(absences)
 
+`$$Dalc = \beta_0 + \beta_1(failures_i) + \beta_2(goout_i) + \beta_3(studytime_i)+ \beta_4(freetime_i)$$` 
+`$$+ \beta_5(famrel_i) \beta_6(ActivitiesBinary_i) + \beta_7(G3_i) + \beta_8(romantic_i)$$`
+`$$+ \beta_9(health_i) + \beta_10(absences_i)$$`
+
 
 
 ```
@@ -403,7 +392,12 @@ Result3%&gt;%
 
 ---
 
-![](presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+```
+## corrplot 0.90 loaded
+```
+
+![](presentation_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -413,7 +407,8 @@ Result3%&gt;%
 ```
 
 ```
-## Warning: Use of `model_regression_follow$.resid` is discouraged. Use `.resid` instead.
+## Warning: Use of `model_regression_follow$.resid` is discouraged. Use `.resid`
+## instead.
 ```
 
 ![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-2.png)&lt;!-- --&gt;
@@ -444,7 +439,7 @@ Linear Regression Result Communication
 In this regression output, only the estimates for goout, studytime, freetime, famrel, and absences were significant at a p-value less than 0.05. Thus, for these variables, we reject the null hypothesis that their estimates are 0, and can state that there exists a relationship between these variables and workday alcohol consumption. 
 
 Thus, we have :
-Dalc= 1.28 + 0.176(goout) + 0.146(studytime) + 0.1(famrel) + 0.13(freetime)
+`$$Dalc= 1.28 + 0.176(goout_i) + 0.146(studytime_i) + 0.1(famrel_i) + 0.13(freetime_i)$$`
 ---
 From our linear model output, A one unit increase in a self-reported, subjective amount of going out with friends (such as high to very high) increases the value of workday alcohol consumption by 0.176. Thus, it appears that the more frequently a student goes out with friends, the more the student drinks. 
 ---
@@ -469,9 +464,9 @@ Overall, we can conclude that the linear regression model we used is good at pre
 Linear Regression - Alcohol Consumption Impact on Academic Performance
 
 
-G3 = B0 + B1(Dalc)
+`$$G3 = \beta_0 + \beta_1(Dalc)$$`
 
-failures = B0 + B1(Dalc)
+`$$failures = \beta_0 + \beta_1(Dalc)$$`
 
 
 ```
