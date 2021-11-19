@@ -26,8 +26,8 @@ library(xaringanthemer)
 ```
 
 ```{r, include = FALSE}
-#setwd("/home/guest/save-the-best-for-last")
-setwd("/home/guest/R/project-01-")
+setwd("/home/guest/save-the-best-for-last")
+#setwd("/home/guest/R/project-01-")
 student <- readr::read_csv("data/student-mat.csv")
 ```
 
