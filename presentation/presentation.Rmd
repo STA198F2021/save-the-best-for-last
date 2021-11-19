@@ -12,7 +12,6 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
@@ -22,39 +21,37 @@ library(knitr)
 library(xaringanthemer)
 ```
 
-## R Markdown
-iii
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
-
-## Slide with Bullets
-
-- Bullet 1
-- Bullet 2
+#Introduction
 
 
-- Bullet 3
 
----
-
-Introduction
-
-This presentation outlines student life and first family circumstances that impact student alcohol consumption and the effect of alcohol consumption on student's efficacy of learning. 
+- Our data set is from the UC Irvine Machine Learning school and is about student alcohol consumption in math classes in Portugal. Our group has decided to focus on the family circumstances that affect student alcohol consumption and the effect student alcohol consumption has on a student's learning efficacy.  
 
 
 ---
-Background 
+#Plots
 
-The effects of alcohol consumption on personal health and cognition  the main area of interest for many researchers. In this research, on one hand, we will focus on other factors, such as family and the environment that impact student alcohol consumption and one the other hand,we will look at the effect of alcohol consumption on student performance in math. 
----
-Data Sources 
-<<<<<<< HEAD
-Found on __Kaggle__, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
-----
-=======
-Found on Kaggle, our dataset collected data on student self-reported alcohol consumption in Portuguese math class in two secondary schools, Gabriel Pereira and Moushino de Silveira during the 2005-2006 school year. In Portuguese secondary schools, ages typically range from 15-19, but this dataset also includes a few individuals from 20 - 22 years old. Additionally, unlike the USA, the minimum drinking age is 18 years old, so drinking prevalence at this educational level might be less comparable to high schools in the USA, but since drinking is legal for students nearing graduation, this may be more parallel to drinking trends in US universities. 
+.pull-left[
+
+```{r}
+student %>%
+  ggplot(aes(x = Dalc)) +
+  geom_histogram(binwidth = 0.5)
+```
+]
+
+
+.pull-right[
+```{r}
+student %>%
+  ggplot(aes(x = Walc)) +
+  geom_histogram(binwidth = 0.5)
+```
+]
+
+
+
 ---
 >>>>>>> 3ab05de56e9325e4ee3328d110683f9bc5e1c7a8
 Data presentation
@@ -69,7 +66,8 @@ Table_variables = data.frame(Variable_name,Details)
 ```
 
 ```{r }
-setwd("/home/guest/save-the-best-for-last")
+#setwd("/home/guest/save-the-best-for-last")
+setwd("/home/guest/R/project-1")
 student <- readr::read_csv("data/student-mat.csv")
 ```
 
