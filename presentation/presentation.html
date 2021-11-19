@@ -100,14 +100,14 @@ A logistic regression was conducted to determine what sort of family or external
 This decision was made in context of categorical nature of many of the variables. These indicators are involved with impacting whether or not a student can be considered an "alcoholic" or "binge drinker.
 --
 .pull_left[$$log(π_i)=log(\frac{π_i}{1-π_i}) = \beta_0 + \beta_1(Urban_i) + \beta_2(FamSmall_i) + \beta_3(ParentsTogether_i)+ \beta_4(MotherSecondary_i)$$ 
-`$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$`
+`$$+ \beta_5(FatherSecondary_i) + \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$`
 `$$+\beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$`]
 --
 
 ---
 
 .pull_left[$$log(π_i)=log(\frac{π_i}{1-π_i}) = \beta_0 + \beta_1(Urban_i) + \beta_2(FamSmall_i) + \beta_3(ParentsTogether_i)+ \beta_4(MotherSecondary_i)$$ 
-`$$+ \beta_5(FatherSecondary_i) \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$`
+`$$+ \beta_5(FatherSecondary_i) + \beta_6(SchoolSupport_i) + \beta_7(FamilySupport_i) + \beta_8(ExtraTutoring_i)$$`
 `$$+ \beta_9(AttendedNursery_i) + \beta_10(InternetAccess_i) + \beta_11(TravelTime_i)$$`]
 --
 
@@ -366,32 +366,13 @@ Significant Model
 
 - Used to predict which variables would be significant or not and to describe how variables may depend on one another.
 
-
-```
-## corrplot 0.90 loaded
-```
-
-![](presentation_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](presentation_files/figure-html/corrplot-1.png)&lt;!-- --&gt;
 
 
 ---
 # Visualizations
 
-
-```
-## [1] 0.1258835
-```
-
-```
-## Warning: Use of `model_regression_follow$.resid` is discouraged. Use `.resid`
-## instead.
-```
-
 ![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-1.png)&lt;!-- --&gt;![](presentation_files/figure-html/R adjusted, histogram of residuals and rmse-2.png)&lt;!-- --&gt;
-
-```
-## [1] -1.38079e-16
-```
 
 
 
